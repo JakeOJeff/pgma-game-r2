@@ -35,11 +35,11 @@ function player:update(dt)
     end
 
     if lk.isDown("down") then
-        self.x = self.x + self.speed
+        self.y = self.y + self.speed
         self.anim = self.animations.down
         moving = true
     elseif lk.isDown("up") then
-        self.x = self.x - self.speed
+        self.y = self.y - self.speed
         self.anim = self.animations.up
         moving = true
     end
