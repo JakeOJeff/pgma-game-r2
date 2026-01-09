@@ -2,6 +2,9 @@ local SceneryInit = require("src.libs.scenery")
 
 lg = love.graphics
 
+wW = lg.getWidth()
+wH = lg.getHeight()
+
 
 local scenery = SceneryInit(
     -- { path = "path.to.scene1"; key = "scene1";  },
