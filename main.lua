@@ -1,6 +1,7 @@
 local SceneryInit = require("src.libs.scenery")
 
 lg = love.graphics
+lm = love.mouse
 
 wW = lg.getWidth()
 wH = lg.getHeight()
