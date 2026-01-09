@@ -12,3 +12,5 @@ end
 function game:draw()
     
 end
+
+return game
