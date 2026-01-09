@@ -17,6 +17,7 @@ function menu:load()
         targetX = 0,
         speed = 20,
         
+        -- ADD DEADZONE LATER
     }
 end
 
