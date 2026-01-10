@@ -60,11 +60,21 @@ function intro:update(dt)
 end
 
 function intro:draw()
-    cam:attach()
-    introMap:drawLayer(introMap.layers["Ground"])
-    introMap:drawLayer(introMap.layers["Trees"])
-    player:draw()
-    cam:detach()
+    if self.introCutscene then
+        
+
+    else
+        cam:attach()
+            introMap:drawLayer(introMap.layers["Ground"])
+            introMap:drawLayer(introMap.layers["Trees"])
+            player:draw()
+        cam:detach()
+    end
+
+end
+
+function intro:inputReceived()
+    
 end
 
 return intro
