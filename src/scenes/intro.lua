@@ -88,6 +88,7 @@ function intro:draw()
         introMap:drawLayer(introMap.layers["Ground"])
         introMap:drawLayer(introMap.layers["Trees"])
         player:draw()
+        player:drawPhysics()
         self:drawPhysics()
         cam:detach()
     end

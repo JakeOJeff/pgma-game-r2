@@ -27,7 +27,7 @@ function player:load()
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
-    self.physics.shape = love.physics.newRectangleShape(12, 18)
+    self.physics.shape = love.physics.newRectangleShape(12 * 6, 18 * 9)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)
 end
@@ -81,11 +81,11 @@ end
 
 -- DEBUG
 function player:drawPhysics()
-    if not self.body or not self.shape then return end
+    if not self.physics.body or not self.physics.shape then return end
 
     love.graphics.setColor(0, 1, 0, 0.7)
 
-    local points = { self.body:getWorldPoints(self.shape:getPoints()) }
+    local points = { self.physics.body:getWorldPoints(self.physics.shape:getPoints()) }
     love.graphics.polygon("line", points)
 
     love.graphics.setColor(1, 1, 1, 1)
