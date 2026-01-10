@@ -19,7 +19,4 @@ local scenery = SceneryInit(
 )
 
 
-shove.setResolution(144,128,{fitMethod="aspect",renderMode="direct"}) --pls change the resolution to what you want
-shove.setWindowMode(864, 768, {resizable = true}) -- 6x scale
-
 scenery:hook(love)
