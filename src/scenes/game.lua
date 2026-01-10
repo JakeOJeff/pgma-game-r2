@@ -16,6 +16,7 @@ function game:load()
 end
 
 function game:update(dt)
+    input:update()
     player:update(dt)
 
     cam:lookAt(player.x, player.y)

@@ -42,11 +42,11 @@ function player:update(dt)
 
     -- Add Baton Input Later
 
-    if lk.isDown("right") then
+    if input:down("right") then
         self.xVel = self.speed
         self.anim = self.animations.right
         moving = true
-    elseif lk.isDown("left") then
+    elseif input:down("left") then
         self.xVel = -self.speed
         self.anim = self.animations.left
         moving = true
@@ -54,11 +54,11 @@ function player:update(dt)
         self.xVel = math.max(math.min(0, self.xVel - self.friction * dt), 0)
     end
 
-    if lk.isDown("down") then
+    if input:down("down") then
         self.yVel = self.speed
         self.anim = self.animations.down
         moving = true
-    elseif lk.isDown("up") then
+    elseif input:down("up") then
         self.yVel = -self.speed
         self.anim = self.animations.up
         moving = true
