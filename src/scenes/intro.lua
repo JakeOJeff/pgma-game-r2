@@ -21,7 +21,7 @@ function intro:load()
         "'Boss Man asked me to give this to you'",
         "Oh lord, what is this"
     }
-    self.currentIndex = 0
+    self.currentIndex = 1
     self.cTimer = 0
     self.fadeTimer = 0
 
@@ -65,7 +65,18 @@ end
 
 function intro:draw()
     if self.introCutscene then
-        
+        lg.setColor(1,1,1,self.fadeTimer)
+        if self.scenes[self.currentIndex] then
+            lg.draw(self.scenes[self.currentIndex], 0, 0)
+        end
+
+        local text = self.sceneTexts[self.currentIndex]
+        local font = love.graphics.getFont()
+        local textW = font:getWidth(text)
+        local textH = font:getHeight()
+
+        lg.setColor(1,1,1,(self.fadeTimer / 0.6))
+        lg.print(text, (wW - textW)/2, (wH - textH - 30))
 
     else
         cam:attach()

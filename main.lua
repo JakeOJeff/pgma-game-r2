@@ -11,7 +11,8 @@ wH = lg.getHeight()
 local scenery = SceneryInit(
     -- { path = "path.to.scene1"; key = "scene1";  },
     { path = "src.scenes.menu"; key = "menu"},
-    { path = "src.scenes.game"; key = "game"; default = "true"}
+        { path = "src.scenes.intro"; key = "intro"; default = "true"},
+    { path = "src.scenes.game"; key = "game"}
 
 )
 
