@@ -7,6 +7,7 @@ lk = love.keyboard
 wW = lg.getWidth()
 wH = lg.getHeight()
 
+World = love.physics.newWorld(0, 2000)
 
 local scenery = SceneryInit(
     -- { path = "path.to.scene1"; key = "scene1";  },

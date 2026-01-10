@@ -31,6 +31,8 @@ function intro:load()
 end
 
 function intro:update(dt)
+    World:update(dt)
+
     if self.introCutscene then
         self.cTimer = self.cTimer + dt
         if self.fadeTimer < 1 then
@@ -65,7 +67,7 @@ end
 
 function intro:draw()
     if self.introCutscene then
-        lg.setColor(1,1,1,self.fadeTimer)
+        lg.setColor(1, 1, 1, self.fadeTimer)
         if self.scenes[self.currentIndex] then
             lg.draw(self.scenes[self.currentIndex], 0, 0)
         end
@@ -75,17 +77,15 @@ function intro:draw()
         local textW = font:getWidth(text)
         local textH = font:getHeight()
 
-        lg.setColor(1,1,1,(self.fadeTimer / 0.6))
-        lg.print(text, (wW - textW)/2, (wH - textH - 30))
-
+        lg.setColor(1, 1, 1, (self.fadeTimer / 0.6))
+        lg.print(text, (wW - textW) / 2, (wH - textH - 30))
     else
         cam:attach()
-            introMap:drawLayer(introMap.layers["Ground"])
-            introMap:drawLayer(introMap.layers["Trees"])
-            player:draw()
+        introMap:drawLayer(introMap.layers["Ground"])
+        introMap:drawLayer(introMap.layers["Trees"])
+        player:draw()
         cam:detach()
     end
-
 end
 
 function intro:keypressed(key)
@@ -106,7 +106,6 @@ function intro:inputReceived()
         self.cTimer = 0
         self.fadeTimer = 0
     else
-
         self.introCutscene = false
     end
 end
