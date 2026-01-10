@@ -13,6 +13,17 @@ function intro:load()
     player = require 'src.classes.player'
 
     player:load()
+
+    self.introCutscene = true
+    self.scenes = {}
+    self.sceneTexts = {}
+    self.currentIndex = 0
+    self.cTimer = 0
+    self.fadeTimer = 0
+
+    for i = 1, 3 do
+        self.scenes[i] = lg.newImage("assets/cutscenes/intro/frame"..i..".png")
+    end
 end
 
 function intro:update(dt)
