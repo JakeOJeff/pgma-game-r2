@@ -78,4 +78,17 @@ function player:syncPhysics()
     self.physics.body:setLinearVelocity(self.xVel, self.yVel)
 end
 
+
+-- DEBUG
+function player:drawPhysics()
+    if not self.body or not self.shape then return end
+
+    love.graphics.setColor(0, 1, 0, 0.7)
+
+    local points = { self.body:getWorldPoints(self.shape:getPoints()) }
+    love.graphics.polygon("line", points)
+
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
 return player

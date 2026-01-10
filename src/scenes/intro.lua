@@ -28,6 +28,9 @@ function intro:load()
     for i = 1, 3 do
         self.scenes[i] = lg.newImage("assets/cutscenes/intro/frame" .. i .. ".png")
     end
+
+    self:spawnCollisionObjectsFromTiled()
+
 end
 
 function intro:update(dt)
@@ -85,6 +88,7 @@ function intro:draw()
         introMap:drawLayer(introMap.layers["Ground"])
         introMap:drawLayer(introMap.layers["Trees"])
         player:draw()
+        self:drawPhysics()
         cam:detach()
     end
 end
@@ -110,5 +114,46 @@ function intro:inputReceived()
         self.introCutscene = false
     end
 end
+
+function intro:spawnCollisionObjectsFromTiled()
+    self.colliders = {}
+
+
+    local layer = introMap.layers["blocks"]
+    if not layer or not layer.objects then return end
+
+
+    for _, obj in ipairs(layer.objects) do
+        local body = love.physics.newBody(
+            World,
+            obj.x + obj.width / 2,
+            obj.y + obj.height / 2,
+            "static"
+        )
+        local shape = love.physics.newRectangleShape(obj.width, obj.height)
+        local fixture = love.physics.newFixture(body, shape)
+
+        table.insert(self.colliders, {
+            body = body,
+            shape = shape
+        })
+    end
+end
+
+-- TEMPORARY DEBUG
+function intro:drawPhysics()
+    lg.setColor(1, 0, 0, 0.6)
+
+    for _, collider in ipairs(self.colliders) do
+        local body = collider.body
+        local shape = collider.shape
+
+        local points = { body:getWorldPoints(shape:getPoints()) }
+        lg.polygon("line", points)
+    end
+
+    lg.setColor(1, 1, 1, 1)
+end
+
 
 return intro
