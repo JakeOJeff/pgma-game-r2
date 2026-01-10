@@ -17,6 +17,9 @@ end
 
 function game:update(dt)
     input:update()
+    if input:down("action") then
+        print("meow")
+    end
     player:update(dt)
 
     cam:lookAt(player.x, player.y)

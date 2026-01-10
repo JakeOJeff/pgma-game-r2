@@ -1,8 +1,4 @@
-local SceneryInit = require("src.libs.scenery")
-shove = require("src.libs.shove")
-
 baton=require("src.libs.baton")
-
 
 --yoinked from baton docs :3
 input = baton.new {
@@ -15,6 +11,10 @@ input = baton.new {
   },
   joystick = love.joystick.getJoysticks()[1],
 }
+
+local SceneryInit = require("src.libs.scenery")
+shove = require("src.libs.shove")
+
 
 lg = love.graphics
 lm = love.mouse
