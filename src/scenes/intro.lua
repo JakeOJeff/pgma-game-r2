@@ -37,6 +37,11 @@ end
 
 function intro:update(dt)
     World:update(dt)
+    input:update()
+
+    if input:down("action") then
+        print("meow")
+    end
 
     if self.introCutscene then
         self.cTimer = self.cTimer + dt
