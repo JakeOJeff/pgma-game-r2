@@ -11,8 +11,8 @@ function player:load()
     self.height = 18
 
 
-    self.speed = 1000
-    self.friction = 2000
+    self.speed = 100
+    self.friction = 1000
 
     self.spriteSheet = lg.newImage('assets/sprites/player-sheet.png')
     self.grid = anim8.newGrid(self.width, self.height, self.spriteSheet:getWidth(), self.spriteSheet:getHeight())
