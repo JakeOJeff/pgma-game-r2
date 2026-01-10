@@ -10,7 +10,6 @@ function player:load()
     self.width = 12
     self.height = 18
 
-    self.scale = 6
 
     self.speed = 1000
     self.friction = 2000
@@ -32,7 +31,7 @@ function player:load()
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
-    self.physics.shape = love.physics.newRectangleShape(self.width * self.scale, self.height * self.scale)
+    self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)
 end
@@ -75,7 +74,7 @@ function player:update(dt)
 end
 
 function player:draw()
-    self.anim:draw(self.spriteSheet, self.x, self.y, nil, self.scale, nil, self.width/2, self.height/2)
+    self.anim:draw(self.spriteSheet, self.x, self.y, nil, 1, nil, self.width/2, self.height/2)
 end
 
 function player:syncPhysics()

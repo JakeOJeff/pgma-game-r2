@@ -42,13 +42,11 @@ function game:update(dt)
 end
 
 function game:draw()
-    shove.beginDraw()
         cam:attach()
             gameMap:drawLayer(gameMap.layers["Ground"])
             gameMap:drawLayer(gameMap.layers["Trees"])
             player:draw()
         cam:detach()
-    shove.endDraw()
 end
 
 return game

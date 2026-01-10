@@ -1,8 +1,8 @@
-local intro = {}
+local intro = {
+}
 
 function intro:load()
-    camera = require 'src.libs.camera'
-    cam = camera()
+
 
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
@@ -11,8 +11,10 @@ function intro:load()
     introMap = sti('src/maps/intro.lua')
 
     player = require 'src.classes.player'
-
     player:load()
+
+    camera = require 'src.libs.camera'
+    cam = camera(player.x, player.y, zoom)
 
     self.introCutscene = true
     self.scenes = {}
@@ -44,27 +46,36 @@ function intro:update(dt)
     else
         player:update(dt)
 
+        -- local desiredX = player.x
+        -- local desiredY = player.y
+
+        -- desiredX = math.max(wW/2 / 2, math.min(desiredX, introMap.width - wW/2 / 2))
+        -- desiredY = math.max(wH/2 / 2, math.min(desiredY,introMap.height - wH/2 / 2))
+
+        -- cam:move((desiredX - cam.x) * 0.1, (desiredY - cam.y) * 0.1)
+
+        cam:zoomTo(zoom)
         cam:lookAt(player.x, player.y)
 
-        if cam.x < wW / 2 then
-            cam.x = wW / 2
-        end
 
-        if cam.y < wH / 2 then
-            cam.y = wH / 2
-        end
+        -- if cam.x < wW / 2 then
+        --     cam.x = wW / 2
+        -- end
 
-        local mapW = introMap.width * introMap.tilewidth
-        local mapH = introMap.height * introMap.tileheight
+        -- if cam.y < wH / 2 then
+        --     cam.y = wH / 2
+        -- end
 
+        -- local mapW = introMap.width * introMap.tilewidth
+        -- local mapH = introMap.height * introMap.tileheight
 
-        if cam.x > (mapW - wW / 2) then
-            cam.x = (mapW - wW / 2)
-        end
-        -- Bottom border
-        if cam.y > (mapH - wH / 2) then
-            cam.y = (mapH - wH / 2)
-        end
+        -- if cam.x > (mapW - wW / 2) then
+        --     cam.x = (mapW - wW / 2)
+        -- end
+        -- -- Bottom border
+        -- if cam.y > (mapH - wH / 2) then
+        --     cam.y = (mapH - wH / 2)
+        -- end
     end
 end
 

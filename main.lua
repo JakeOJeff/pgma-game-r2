@@ -1,5 +1,4 @@
 local SceneryInit = require("src.libs.scenery")
-shove = require("src.libs.shove")
 
 lg = love.graphics
 lm = love.mouse
@@ -12,6 +11,9 @@ wW = lg.getWidth()
 wH = lg.getHeight()
 
 scale = wW/defW -- Scale Value
+
+zoomDefault = 4
+zoom = zoomDefault * scale
 
 World = love.physics.newWorld(0, 2000)
 
@@ -29,6 +31,8 @@ function love.resize(w, h)
     wH = h
 
     scale = wW / defW
+    zoom = zoomDefault * scale
+
 end
 
 
