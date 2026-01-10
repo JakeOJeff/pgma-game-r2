@@ -37,31 +37,41 @@ function player:load()
 end
 
 function player:update(dt)
+    local dx, dy = 0, 0
     local moving = false
 
-    -- Add Baton Input Later
 
     if input:down("right") then
-        self.xVel = self.speed
+        dx = dx + 1
         self.anim = self.animations.right
         moving = true
     elseif input:down("left") then
-        self.xVel = -self.speed
+        dx = dx - 1
         self.anim = self.animations.left
         moving = true
-    else
-        self.xVel = math.max(math.min(0, self.xVel - self.friction * dt), 0)
     end
 
     if input:down("down") then
-        self.yVel = self.speed
+        dy = dy + 1
         self.anim = self.animations.down
         moving = true
     elseif input:down("up") then
-        self.yVel = -self.speed
+        dy = dy - 1
         self.anim = self.animations.up
         moving = true
+    end
+
+    -- Normalize diagonal movement
+    local len = math.sqrt(dx * dx + dy * dy)
+    if len > 0 then
+        dx = dx / len
+        dy = dy / len
+
+        self.xVel = dx * self.speed
+        self.yVel = dy * self.speed
     else
+        -- Apply friction when not moving
+        self.xVel = math.max(math.min(0, self.xVel - self.friction * dt), 0)
         self.yVel = math.max(math.min(0, self.yVel - self.friction * dt), 0)
     end
 
@@ -72,6 +82,7 @@ function player:update(dt)
     self.anim:update(dt)
     self:syncPhysics()
 end
+
 
 function player:draw()
     self.anim:draw(self.spriteSheet, self.x, self.y, nil, 1, nil, self.width/2, self.height/2)
