@@ -7,11 +7,16 @@ function player:load()
     self.xVel = 0
     self.yVel = 0
 
+    self.width = 12
+    self.height = 18
+
+    self.scale = 6
+
     self.speed = 1000
     self.friction = 2000
 
     self.spriteSheet = lg.newImage('assets/sprites/player-sheet.png')
-    self.grid = anim8.newGrid(12, 18, self.spriteSheet:getWidth(), self.spriteSheet:getHeight())
+    self.grid = anim8.newGrid(self.width, self.height, self.spriteSheet:getWidth(), self.spriteSheet:getHeight())
 
     self.animations = {
         down = anim8.newAnimation(self.grid('1-4', 1), 0.2),
@@ -27,7 +32,7 @@ function player:load()
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
-    self.physics.shape = love.physics.newRectangleShape(12 * 6, 18 * 9)
+    self.physics.shape = love.physics.newRectangleShape(self.width * self.scale, self.height * self.scale)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)
 end
@@ -70,7 +75,7 @@ function player:update(dt)
 end
 
 function player:draw()
-    self.anim:draw(self.spriteSheet, self.x, self.y, nil, 6, nil, 6, 9)
+    self.anim:draw(self.spriteSheet, self.x, self.y, nil, self.scale, nil, self.width/2, self.height/2)
 end
 
 function player:syncPhysics()
