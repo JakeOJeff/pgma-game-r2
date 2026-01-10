@@ -7,8 +7,8 @@ function player:load()
     self.xVel = 0
     self.yVel = 0
 
-    self.speed = 2000
-    self.friction = 1000
+    self.speed = 1000
+    self.friction = 2000
 
     self.spriteSheet = lg.newImage('assets/sprites/player-sheet.png')
     self.grid = anim8.newGrid(12, 18, self.spriteSheet:getWidth(), self.spriteSheet:getHeight())
@@ -45,6 +45,8 @@ function player:update(dt)
         self.xVel = -self.speed
         self.anim = self.animations.left
         moving = true
+    else
+        self.xVel = math.max(math.min(0, self.xVel - self.friction * dt), 0)
     end
 
     if lk.isDown("down") then
@@ -55,6 +57,8 @@ function player:update(dt)
         self.yVel = -self.speed
         self.anim = self.animations.up
         moving = true
+    else
+        self.yVel = math.max(math.min(0, self.yVel - self.friction * dt), 0)
     end
 
     if not moving then

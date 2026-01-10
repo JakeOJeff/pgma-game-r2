@@ -80,6 +80,7 @@ function intro:draw()
         lg.setColor(1, 1, 1, (self.fadeTimer / 0.6))
         lg.print(text, (wW - textW) / 2, (wH - textH - 30))
     else
+        lg.setColor(1,1,1,1)
         cam:attach()
         introMap:drawLayer(introMap.layers["Ground"])
         introMap:drawLayer(introMap.layers["Trees"])
