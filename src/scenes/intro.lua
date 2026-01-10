@@ -71,9 +71,14 @@ end
 function intro:draw()
     if self.introCutscene then
         lg.setColor(1, 1, 1, self.fadeTimer)
-        if self.scenes[self.currentIndex] then
-            lg.draw(self.scenes[self.currentIndex], 0, 0)
-        end
+
+        lg.push()
+            lg.scale(scale, scale)
+            lg.translate(0, 0)
+            if self.scenes[self.currentIndex] then
+                lg.draw(self.scenes[self.currentIndex], 0, 0)
+            end
+        lg.pop()
 
         local text = self.sceneTexts[self.currentIndex]
         local font = love.graphics.getFont()
