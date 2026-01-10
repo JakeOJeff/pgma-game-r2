@@ -46,11 +46,11 @@ function game:update(dt)
 end
 
 function game:draw()
-        cam:attach()
-            gameMap:drawLayer(gameMap.layers["Ground"])
+    cam:attach()
+        gameMap:drawLayer(gameMap.layers["Ground"])
             gameMap:drawLayer(gameMap.layers["Trees"])
-            player:draw()
-        cam:detach()
+        player:draw()
+    cam:detach()
 end
 
 return game
