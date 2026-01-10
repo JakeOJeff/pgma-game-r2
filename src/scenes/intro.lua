@@ -74,7 +74,14 @@ function intro:draw()
 end
 
 function intro:inputReceived()
-    
+    if self.currentIndex < #self.sceneTexts then
+        self.currentIndex = self.currentIndex + 1
+        self.cTimer = 0
+        self.fadeTimer = 0
+    else
+
+        self.introCutscene = false
+    end
 end
 
 return intro
