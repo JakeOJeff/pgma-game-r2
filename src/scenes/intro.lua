@@ -2,8 +2,6 @@ local intro = {
 }
 
 function intro:load()
-
-
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
@@ -27,12 +25,16 @@ function intro:load()
     self.cTimer = 0
     self.fadeTimer = 0
 
+    self.elevatorCutscene = false
+
+    self.floor = 3 -- Starting floor
+    self.innerElevatorImage = lg.newImage("assets/cutscenes/intro/elevator.png")
+
     for i = 1, 3 do
         self.scenes[i] = lg.newImage("assets/cutscenes/intro/frame" .. i .. ".png")
     end
 
     self:spawnCollisionObjectsFromTiled()
-
 end
 
 function intro:update(dt)
@@ -40,7 +42,8 @@ function intro:update(dt)
     input:update()
 
     if input:down("action") then
-        print("meow")
+        self.introCutscene = false
+        self.elevatorCutscene = true
     end
 
     if self.introCutscene then
@@ -89,11 +92,11 @@ function intro:draw()
         lg.setColor(1, 1, 1, self.fadeTimer)
 
         lg.push()
-            lg.scale(scale, scale)
-            lg.translate(0, 0)
-            if self.scenes[self.currentIndex] then
-                lg.draw(self.scenes[self.currentIndex], 0, 0)
-            end
+        lg.scale(scale, scale)
+        lg.translate(0, 0)
+        if self.scenes[self.currentIndex] then
+            lg.draw(self.scenes[self.currentIndex], 0, 0)
+        end
         lg.pop()
 
         local text = self.sceneTexts[self.currentIndex]
@@ -103,8 +106,22 @@ function intro:draw()
 
         lg.setColor(1, 1, 1, (self.fadeTimer / 0.6))
         lg.print(text, (wW - textW) / 2, (wH - textH - 30))
+    elseif self.elevatorCutscene then
+        lg.setColor(1, 1, 1, 1)
+        lg.push()
+        lg.scale(scale, scale)
+        lg.translate(0, 0)
+        lg.draw(self.innerElevatorImage)
+        lg.pop()
+        lg.setColor(0, 0, 0, 1)
+
+        local text = self.floor
+        local font = love.graphics.getFont()
+        local textW = font:getWidth(text)
+        local textH = font:getHeight()
+        lg.print(text, ( wW - textW )/2,  120)
     else
-        lg.setColor(1,1,1,1)
+        lg.setColor(1, 1, 1, 1)
         cam:attach()
         introMap:drawLayer(introMap.layers["Ground"])
         introMap:drawLayer(introMap.layers["Trees"])
@@ -176,6 +193,5 @@ function intro:drawPhysics()
 
     lg.setColor(1, 1, 1, 1)
 end
-
 
 return intro
