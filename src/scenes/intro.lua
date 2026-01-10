@@ -16,7 +16,11 @@ function intro:load()
 
     self.introCutscene = true
     self.scenes = {}
-    self.sceneTexts = {}
+    self.sceneTexts = {
+        "...",
+        "'Boss Man asked me to give this to you'",
+        "Oh lord, what is this"
+    }
     self.currentIndex = 0
     self.cTimer = 0
     self.fadeTimer = 0
@@ -71,6 +75,18 @@ function intro:draw()
         cam:detach()
     end
 
+end
+
+function intro:keypressed(key)
+    self:inputReceived()
+end
+
+function intro:gamepadpressed(joystick, button)
+    self:inputReceived()
+end
+
+function intro:mousepressed(x, y, button)
+    self:inputReceived()
 end
 
 function intro:inputReceived()
