@@ -35,6 +35,13 @@ function intro:load()
     end
 
     self:spawnCollisionObjectsFromTiled()
+<<<<<<< HEAD
+=======
+
+    introMap.layers.blocks.visible=false
+    introMap.layers.elevator.visible=false
+
+>>>>>>> 40f8e36767cbc6ff114e3959a8ed0293c348325b
 end
 
 function intro:update(dt)
@@ -123,8 +130,13 @@ function intro:draw()
     else
         lg.setColor(1, 1, 1, 1)
         cam:attach()
-        introMap:drawLayer(introMap.layers["Ground"])
-        introMap:drawLayer(introMap.layers["Trees"])
+        --introMap:drawLayer(introMap.layers["Ground"])
+        --introMap:drawLayer(introMap.layers["Trees"])
+        for k,v in ipairs(introMap.layers) do
+            if v.visible and v.opacity>0 then
+                introMap:drawLayer(v)
+            end
+        end
         player:draw()
         player:drawPhysics()
         self:drawPhysics()
