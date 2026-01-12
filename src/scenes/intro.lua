@@ -35,13 +35,10 @@ function intro:load()
     end
 
     self:spawnCollisionObjectsFromTiled()
-<<<<<<< HEAD
-=======
 
     introMap.layers.blocks.visible=false
     introMap.layers.elevator.visible=false
 
->>>>>>> 40f8e36767cbc6ff114e3959a8ed0293c348325b
 end
 
 function intro:update(dt)
