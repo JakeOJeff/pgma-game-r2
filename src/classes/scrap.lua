@@ -82,7 +82,10 @@ end
 function Scrap.beginContact(a, b, collision)
     for i, v in ipairs(ActiveScraps) do
         if a == v.physics.fixture or b == v.physics.fixture then
-            if player
+            if a == player.physics.fixture or b == player.physics.fixture then
+                v.toBeRemoved = true
+                return true
+            end
         end
     end
 end
