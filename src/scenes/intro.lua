@@ -51,8 +51,10 @@ function intro:update(dt)
             self.fadeTimer = self.fadeTimer + (0.5 * dt)
         end
     elseif self.elevatorCutscene then
-        if self.floor > -1 then
-            self.floor = math.max(-1,(self.floor - dt/2))
+        if math.floor(self.floor) > -2 then
+            self.floor = math.max(-2,(self.floor - dt/2))
+        else
+            self.setScene("game")
         end
     else
         player:update(dt)
