@@ -22,7 +22,7 @@ function intro:load()
 
     self.elevatorCutscene = false
 
-    self.floor = 3 -- Starting floor
+    self.floor = 4 -- Starting floor
     self.innerElevatorImage = lg.newImage("assets/cutscenes/intro/elevator.png")
 
     for i = 1, 3 do
@@ -50,6 +50,10 @@ function intro:update(dt)
         if self.fadeTimer < 1 then
             self.fadeTimer = self.fadeTimer + (0.5 * dt)
         end
+    elseif self.elevatorCutscene then
+        if self.floor > -1 then
+            self.floor = math.max(-1,(self.floor - dt/2))
+        end
     else
         player:update(dt)
 
@@ -68,6 +72,8 @@ function intro:update(dt)
 
         if utils.dist(player.x, player.y, elevatorEntity.x + elevatorEntity.width / 2,
             elevatorEntity.y + elevatorEntity.height / 2) < 50 then
+
+                -- right now its sudden entry, we can add prompting later
             self.introCutscene = false
             self.elevatorCutscene = true
         end
@@ -121,7 +127,7 @@ function intro:draw()
         lg.pop()
         lg.setColor(0, 0, 0, 1)
 
-        local text = self.floor
+        local text = math.floor(self.floor)
         local font = love.graphics.getFont()
         local textW = font:getWidth(text)
         local textH = font:getHeight()
