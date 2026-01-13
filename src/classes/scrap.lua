@@ -57,5 +57,33 @@ function Scrap:updateAll(dt)
     end
 end
 
+function Scrap:checkRemoved()
+    if self.toBeRemoved then
+        -- local img = love.graphics.newImage()
 
+        -- local iw, ih = img:getWidth(), img:getHeight()
+
+        self:remove()
+    end
+end
+
+
+function Scrap:draw()
+    love.graphics.draw(self.img, self.x, self.y + self.scaleX * 4, 0, self.scaleX, 1, self.width/2 , self.height /2)
+end
+
+function Scrap:drawAll()
+    for i, v in ipairs(ActiveScraps) do
+        v:draw()
+    end
+end
+
+
+function Scrap.beginContact(a, b, collision)
+    for i, v in ipairs(ActiveScraps) do
+        if a == v.physics.fixture or b == v.physics.fixture then
+            if player
+        end
+    end
+end
 

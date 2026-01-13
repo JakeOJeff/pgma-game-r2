@@ -29,6 +29,7 @@ function player:load()
 
 
     self.collectedScraps = 0
+    
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
