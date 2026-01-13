@@ -29,10 +29,12 @@ function intro:load()
         self.scenes[i] = lg.newImage("assets/cutscenes/intro/frame" .. i .. ".png")
     end
 
-    self:spawnCollisionObjectsFromTiled()
+    World:setCallbacks(beginContact, endContact)
 
     introMap.layers.blocks.visible = false
     introMap.layers.entities.visible = false
+
+    World:setCallbacks()
 
 end
 
