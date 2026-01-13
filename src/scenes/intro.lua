@@ -1,5 +1,4 @@
-local intro = {
-}
+local intro = {}
 
 function intro:load()
     anim8 = require 'src.libs.anim8'
@@ -16,11 +15,7 @@ function intro:load()
 
     self.introCutscene = true
     self.scenes = {}
-    self.sceneTexts = {
-        "...",
-        "'Boss Man asked me to give this to you'",
-        "Oh lord, what is this"
-    }
+    self.sceneTexts = {"...", "'Boss Man asked me to give this to you'", "Oh lord, what is this"}
     self.currentIndex = 1
     self.cTimer = 0
     self.fadeTimer = 0
@@ -36,8 +31,8 @@ function intro:load()
 
     self:spawnCollisionObjectsFromTiled()
 
-    introMap.layers.blocks.visible=false
-    introMap.layers.elevator.visible=false
+    introMap.layers.blocks.visible = false
+    introMap.layers.entities.visible = false
 
 end
 
@@ -69,6 +64,13 @@ function intro:update(dt)
         cam:zoomTo(zoom)
         cam:lookAt(player.x, player.y)
 
+        local elevatorEntity = self:findObject("elevator")
+
+        if utils.dist(player.x, player.y, elevatorEntity.x + elevatorEntity.width / 2,
+            elevatorEntity.y + elevatorEntity.height / 2) < 50 then
+            self.introCutscene = false
+            self.elevatorCutscene = true
+        end
 
         -- if cam.x < wW / 2 then
         --     cam.x = wW / 2
@@ -123,14 +125,14 @@ function intro:draw()
         local font = love.graphics.getFont()
         local textW = font:getWidth(text)
         local textH = font:getHeight()
-        lg.print(text, ( wW - textW )/2,  120)
+        lg.print(text, (wW - textW) / 2, 120)
     else
         lg.setColor(1, 1, 1, 1)
         cam:attach()
-        --introMap:drawLayer(introMap.layers["Ground"])
-        --introMap:drawLayer(introMap.layers["Trees"])
-        for k,v in ipairs(introMap.layers) do
-            if v.visible and v.opacity>0 then
+        -- introMap:drawLayer(introMap.layers["Ground"])
+        -- introMap:drawLayer(introMap.layers["Trees"])
+        for k, v in ipairs(introMap.layers) do
+            if v.visible and v.opacity > 0 then
                 introMap:drawLayer(v)
             end
         end
@@ -166,18 +168,13 @@ end
 function intro:spawnCollisionObjectsFromTiled()
     self.colliders = {}
 
-
     local layer = introMap.layers["blocks"]
-    if not layer or not layer.objects then return end
-
+    if not layer or not layer.objects then
+        return
+    end
 
     for _, obj in ipairs(layer.objects) do
-        local body = love.physics.newBody(
-            World,
-            obj.x + obj.width / 2,
-            obj.y + obj.height / 2,
-            "static"
-        )
+        local body = love.physics.newBody(World, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
         local shape = love.physics.newRectangleShape(obj.width, obj.height)
         local fixture = love.physics.newFixture(body, shape)
 
@@ -196,11 +193,21 @@ function intro:drawPhysics()
         local body = collider.body
         local shape = collider.shape
 
-        local points = { body:getWorldPoints(shape:getPoints()) }
+        local points = {body:getWorldPoints(shape:getPoints())}
         lg.polygon("line", points)
     end
 
     lg.setColor(1, 1, 1, 1)
+end
+
+function intro:findObject(objName)
+
+    for _, obj in ipairs(introMap.layers["entities"].objects) do
+        if obj.name == objName then
+            return obj
+        end
+    end
+
 end
 
 return intro

@@ -177,7 +177,7 @@ return {
       type = "objectgroup",
       draworder = "topdown",
       id = 3,
-      name = "elevator",
+      name = "entities",
       class = "",
       visible = true,
       opacity = 1,
@@ -189,7 +189,7 @@ return {
       objects = {
         {
           id = 1,
-          name = "",
+          name = "elevator",
           type = "",
           shape = "rectangle",
           x = 192,
