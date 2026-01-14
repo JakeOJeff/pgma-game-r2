@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="15">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="18">
  <editorsettings>
-  <export target="intro.lua" format="lua"/>
+  <export target="game.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="54" columns="9">
   <image source="tileset.png" width="144" height="96"/>
@@ -79,6 +79,9 @@
  </layer>
  <objectgroup id="3" name="entities">
   <object id="1" name="elevator" x="192" y="48" width="96" height="16"/>
+  <object id="16" name="scrap" x="80" y="80" width="16" height="16">
+   <ellipse/>
+  </object>
  </objectgroup>
  <layer id="2" name="Trees" width="30" height="30">
   <data encoding="csv">
