@@ -25,6 +25,8 @@ function intro:load()
             Scrap:new(v.x + v.width / 2, v.y + v.height / 2)
         end
     end
+    World:setCallbacks(beginContact)
+
 end
 
 function intro:update(dt)

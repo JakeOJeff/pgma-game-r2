@@ -5,7 +5,7 @@ function utils.dist(x1, y1, x2, y2)
 end
 
 function beginContact(a, b, collision)
-    Scrap:beginContact(a, b, collision)
+    Scrap.beginContact(a, b, collision)
 end
 
 return utils

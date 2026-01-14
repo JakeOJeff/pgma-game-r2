@@ -40,7 +40,7 @@ function Scrap:remove()
         if v == self then
             self.physics.body:destroy() 
             table.remove(ActiveScraps, i)
-            Player.collectedScraps = Player.collectedScraps + 1             
+            player.collectedScraps = player.collectedScraps + 1             
         end
     end
 end
