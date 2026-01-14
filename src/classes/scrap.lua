@@ -20,13 +20,13 @@ function Scrap:new(x, y)
 
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "static")
-    self.physics.shape = love.physics.newBody(self.width, self.height)
+    self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
 
     self.physics.fixture:setSensor(true)
+    table.insert(ActiveScraps, self)
 
     return self
-
 end
 
 function Scrap:update(dt)
@@ -90,3 +90,5 @@ function Scrap.beginContact(a, b, collision)
     end
 end
 
+
+return Scrap

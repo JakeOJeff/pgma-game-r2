@@ -20,6 +20,11 @@ function intro:load()
     gameMap.layers.blocks.visible = false
     gameMap.layers.entities.visible = false
 
+    for i, v in ipairs(gameMap.layers.entities.objects) do
+        if v.name == "scrap" then 
+            Scrap:new(v.x + v.width / 2, v.y + v.height / 2)
+        end
+    end
 end
 
 function intro:update(dt)

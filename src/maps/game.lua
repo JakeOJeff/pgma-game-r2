@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 7,
-  nextobjectid = 18,
+  nextobjectid = 19,
   properties = {},
   tilesets = {
     {
@@ -201,14 +201,14 @@ return {
           properties = {}
         },
         {
-          id = 16,
+          id = 18,
           name = "scrap",
           type = "",
-          shape = "ellipse",
-          x = 80,
+          shape = "rectangle",
+          x = 112,
           y = 80,
-          width = 16,
-          height = 16,
+          width = 0,
+          height = 0,
           rotation = 0,
           visible = true,
           properties = {}
