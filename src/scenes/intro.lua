@@ -1,9 +1,6 @@
-local intro = {
-}
+local intro = {}
 
 function intro:load()
-
-
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
@@ -18,23 +15,26 @@ function intro:load()
 
     self.introCutscene = true
     self.scenes = {}
-    self.sceneTexts = {
-        "...",
-        "'Boss Man asked me to give this to you'",
-        "Oh lord, what is this"
-    }
+    self.sceneTexts = {"...", "'Boss Man asked me to give this to you'", "Oh lord, what is this"}
     self.currentIndex = 1
     self.cTimer = 0
     self.fadeTimer = 0
+
+    self.elevatorCutscene = false
+
+    self.floor = 4 -- Starting floor
+    self.innerElevatorImage = lg.newImage("assets/cutscenes/intro/elevator.png")
 
     for i = 1, 3 do
         self.scenes[i] = lg.newImage("assets/cutscenes/intro/frame" .. i .. ".png")
     end
 
-    self:spawnCollisionObjectsFromTiled()
+    World:setCallbacks(beginContact, endContact)
 
-    introMap.layers.blocks.visible=false
-    introMap.layers.elevator.visible=false
+    introMap.layers.blocks.visible = false
+    introMap.layers.entities.visible = false
+
+    World:setCallbacks()
 
 end
 
@@ -43,13 +43,20 @@ function intro:update(dt)
     input:update()
 
     if input:down("action") then
-        print("meow")
+        self.introCutscene = false
+        self.elevatorCutscene = true
     end
 
     if self.introCutscene then
         self.cTimer = self.cTimer + dt
         if self.fadeTimer < 1 then
             self.fadeTimer = self.fadeTimer + (0.5 * dt)
+        end
+    elseif self.elevatorCutscene then
+        if math.floor(self.floor) > -2 then
+            self.floor = math.max(-2,(self.floor - dt/2))
+        else
+            self.setScene("game")
         end
     else
         player:update(dt)
@@ -65,6 +72,15 @@ function intro:update(dt)
         cam:zoomTo(zoom)
         cam:lookAt(player.x, player.y)
 
+        local elevatorEntity = self:findObject("elevator")
+
+        if utils.dist(player.x, player.y, elevatorEntity.x + elevatorEntity.width / 2,
+            elevatorEntity.y + elevatorEntity.height / 2) < 50 then
+
+                -- right now its sudden entry, we can add prompting later
+            self.introCutscene = false
+            self.elevatorCutscene = true
+        end
 
         -- if cam.x < wW / 2 then
         --     cam.x = wW / 2
@@ -92,11 +108,11 @@ function intro:draw()
         lg.setColor(1, 1, 1, self.fadeTimer)
 
         lg.push()
-            lg.scale(scale, scale)
-            lg.translate(0, 0)
-            if self.scenes[self.currentIndex] then
-                lg.draw(self.scenes[self.currentIndex], 0, 0)
-            end
+        lg.scale(scale, scale)
+        lg.translate(0, 0)
+        if self.scenes[self.currentIndex] then
+            lg.draw(self.scenes[self.currentIndex], 0, 0)
+        end
         lg.pop()
 
         local text = self.sceneTexts[self.currentIndex]
@@ -106,13 +122,27 @@ function intro:draw()
 
         lg.setColor(1, 1, 1, (self.fadeTimer / 0.6))
         lg.print(text, (wW - textW) / 2, (wH - textH - 30))
+    elseif self.elevatorCutscene then
+        lg.setColor(1, 1, 1, 1)
+        lg.push()
+        lg.scale(scale, scale)
+        lg.translate(0, 0)
+        lg.draw(self.innerElevatorImage)
+        lg.pop()
+        lg.setColor(0, 0, 0, 1)
+
+        local text = math.floor(self.floor)
+        local font = love.graphics.getFont()
+        local textW = font:getWidth(text)
+        local textH = font:getHeight()
+        lg.print(text, (wW - textW) / 2, 120)
     else
-        lg.setColor(1,1,1,1)
+        lg.setColor(1, 1, 1, 1)
         cam:attach()
-        --introMap:drawLayer(introMap.layers["Ground"])
-        --introMap:drawLayer(introMap.layers["Trees"])
-        for k,v in ipairs(introMap.layers) do
-            if v.visible and v.opacity>0 then
+        -- introMap:drawLayer(introMap.layers["Ground"])
+        -- introMap:drawLayer(introMap.layers["Trees"])
+        for k, v in ipairs(introMap.layers) do
+            if v.visible and v.opacity > 0 then
                 introMap:drawLayer(v)
             end
         end
@@ -148,18 +178,13 @@ end
 function intro:spawnCollisionObjectsFromTiled()
     self.colliders = {}
 
-
     local layer = introMap.layers["blocks"]
-    if not layer or not layer.objects then return end
-
+    if not layer or not layer.objects then
+        return
+    end
 
     for _, obj in ipairs(layer.objects) do
-        local body = love.physics.newBody(
-            World,
-            obj.x + obj.width / 2,
-            obj.y + obj.height / 2,
-            "static"
-        )
+        local body = love.physics.newBody(World, obj.x + obj.width / 2, obj.y + obj.height / 2, "static")
         local shape = love.physics.newRectangleShape(obj.width, obj.height)
         local fixture = love.physics.newFixture(body, shape)
 
@@ -178,12 +203,21 @@ function intro:drawPhysics()
         local body = collider.body
         local shape = collider.shape
 
-        local points = { body:getWorldPoints(shape:getPoints()) }
+        local points = {body:getWorldPoints(shape:getPoints())}
         lg.polygon("line", points)
     end
 
     lg.setColor(1, 1, 1, 1)
 end
 
+function intro:findObject(objName)
+
+    for _, obj in ipairs(introMap.layers["entities"].objects) do
+        if obj.name == objName then
+            return obj
+        end
+    end
+
+end
 
 return intro
