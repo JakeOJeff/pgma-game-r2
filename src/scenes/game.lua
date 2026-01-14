@@ -10,6 +10,8 @@ function intro:load()
     player = require 'src.classes.player'
     player:load()
 
+    Scrap = require "src.classes.scrap"
+
     camera = require 'src.libs.camera'
     cam = camera(player.x, player.y, zoom)
 
@@ -23,6 +25,8 @@ end
 function intro:update(dt)
     World:update(dt)
     input:update()
+
+    Scrap:updateAll()
 
         player:update(dt)
 
@@ -44,6 +48,8 @@ function intro:draw()
                 gameMap:drawLayer(v)
             end
         end
+
+        Scrap:drawAll()
         player:draw()
         player:drawPhysics()
         self:drawPhysics()

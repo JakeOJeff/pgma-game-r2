@@ -9,7 +9,7 @@ function Scrap:new(x, y)
     self.x = x 
     self.y = y
 
-    self.img = love.graphics.newImage()
+    self.img = love.graphics.newImage("assets/sprites/scrap.png")
 
     self.width = self.img:getWidth()
     self.height = self.img:getHeight()
