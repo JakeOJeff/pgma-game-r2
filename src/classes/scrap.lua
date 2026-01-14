@@ -69,6 +69,9 @@ end
 
 
 function Scrap:draw()
+    lg.setColor(0, 0, 0, 0.5)
+        love.graphics.draw(self.img, self.x, self.y + math.abs(self.scaleX) * 4, 0, self.scaleX, 1, self.width/2 , self.height /2)
+    lg.setColor(1,1,1,1)
     love.graphics.draw(self.img, self.x, self.y + self.scaleX * 4, 0, self.scaleX, 1, self.width/2 , self.height /2)
 end
 
