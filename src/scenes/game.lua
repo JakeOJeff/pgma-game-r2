@@ -1,6 +1,6 @@
-local intro = {}
+local game = {}
 
-function intro:load()
+function game:load()
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
@@ -29,7 +29,7 @@ function intro:load()
 
 end
 
-function intro:update(dt)
+function game:update(dt)
     World:update(dt)
     input:update()
 
@@ -44,7 +44,7 @@ function intro:update(dt)
 
 end
 
-function intro:draw()
+function game:draw()
    
         lg.setColor(1, 1, 1, 1)
         cam:attach()
@@ -63,23 +63,23 @@ function intro:draw()
         cam:detach()
 end
 
-function intro:keypressed(key)
+function game:keypressed(key)
     self:inputReceived()
 end
 
-function intro:gamepadpressed(joystick, button)
+function game:gamepadpressed(joystick, button)
     self:inputReceived()
 end
 
-function intro:mousepressed(x, y, button)
+function game:mousepressed(x, y, button)
     self:inputReceived()
 end
 
-function intro:inputReceived()
+function game:inputReceived()
 
 end
 
-function intro:spawnCollisionObjectsFromTiled()
+function game:spawnCollisionObjectsFromTiled()
     self.colliders = {}
 
     local layer = gameMap.layers["blocks"]
@@ -100,7 +100,7 @@ function intro:spawnCollisionObjectsFromTiled()
 end
 
 -- TEMPORARY DEBUG
-function intro:drawPhysics()
+function game:drawPhysics()
     lg.setColor(1, 0, 0, 0.6)
 
     for _, collider in ipairs(self.colliders) do
@@ -114,7 +114,7 @@ function intro:drawPhysics()
     lg.setColor(1, 1, 1, 1)
 end
 
-function intro:findObject(objName)
+function game:findObject(objName)
 
     for _, obj in ipairs(gameMap.layers["entities"].objects) do
         if obj.name == objName then
@@ -124,4 +124,4 @@ function intro:findObject(objName)
 
 end
 
-return intro
+return game
