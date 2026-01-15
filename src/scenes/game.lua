@@ -1,7 +1,6 @@
 local game = {}
 local Dungeon = require("src.dungeon.dungeon")
 local Renderer = require("src.dungeon.renderer")
-local Collision = require("src.dungeon.collision")
 
 local WallPhysics = require("src.dungeon.physics")
 
@@ -17,7 +16,7 @@ function game:load()
     self.dungeon = Dungeon:new(100, 100, 1200)
     self.dungeon:generate()
 
-    WallPhysics:build(World, self.dungeon)
+    WallPhysics:build(self.dungeon)
 
     self.renderer = Renderer:new(16)
 
@@ -79,13 +78,6 @@ function game:update(dt)
     local nx = player.x + player.speed * dt
     local ny = player.y + player.speed * dt
 
-    if not Collision:isBlocked(self.dungeon, nx, player.y, player.width, player.height) then
-        player.x = nx
-    end
-
-    if not Collision:isBlocked(self.dungeon, player.x, ny, player.width, player.height) then
-        player.y = ny
-    end
     player:update(dt)
 
     cam:zoomTo(zoom)
@@ -97,6 +89,10 @@ function game:draw()
 
     lg.setColor(1, 1, 1, 1)
     cam:attach()
+
+    cam.x = math.floor(cam.x * zoom) / zoom
+    cam.y = math.floor(cam.y * zoom) / zoom
+
     -- gameMap:drawLayer(gameMap.layers["Ground"])
     -- gameMap:drawLayer(gameMap.layers["Trees"])
     -- for k, v in ipairs(gameMap.layers) do

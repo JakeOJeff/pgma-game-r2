@@ -12,7 +12,7 @@ function physics:clear()
     end
     self.bodies={}
 end
-function physics:build(world, dungeon)
+function physics:build(dungeon)
     self:clear()
 
     for y = 1, dungeon.height do
@@ -21,11 +21,11 @@ function physics:build(world, dungeon)
                 local px = (x - 0.5) * TILE_SIZE
                 local py = (y - 0.5) * TILE_SIZE
 
-                local body = love.physics.newBody(world, px, py, "static")
+                local body = love.physics.newBody(World, px, py, "static")
                 local shape = love.physics.newRectangleShape(TILE_SIZE, TILE_SIZE)
                 local fixture = love.physics.newFixture(body, shape)
 
-                fixture:setFriction(0.8)
+                -- fixture:setFriction(0.8)
 
                 table.insert(self.bodies, body)
             end
