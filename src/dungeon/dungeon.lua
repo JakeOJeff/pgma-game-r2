@@ -4,6 +4,7 @@ Dungeon.__index = Dungeon
 -- tiles:
 -- 1 = floor
 -- 2 = wall
+-- 3 = hollow
 
 local TUNNEL_WIDTH = 2
 
@@ -25,7 +26,7 @@ function Dungeon:fillWithWalls()
     for y = 1, self.height do
         self.tiles[y] = {}
         for x = 1, self.width do
-            self.tiles[y][x] = 2
+            self.tiles[y][x] = 3
         end
     end
 end
@@ -34,9 +35,8 @@ end
 function Dungeon:carveRoom(rx, ry, rw, rh)
     for y = ry, ry + rh - 1 do
         for x = rx, rx + rw - 1 do
-            if x > 1 and y > 1 and x < self.width and y < self.height then
+            if x > 1 and y > 1 and x < self.width and y < self.height  then 
                 self.tiles[y][x] = 1
-
             end
         end
     end
