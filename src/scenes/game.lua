@@ -2,7 +2,11 @@ local game = {}
     local Dungeon = require("src.dungeon.dungeon")
     local Renderer = require("src.dungeon.renderer")
     local Collision = require("src.dungeon.collision")
-function game:load()
+
+local WallPhysics = require("src.dungeon.physics")
+
+
+    function game:load()
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
@@ -14,6 +18,9 @@ function game:load()
 
     self.dungeon = Dungeon:new(50, 40, 1200)
     self.dungeon:generate()
+
+    WallPhysics:build(World, self.dungeon)
+
 
     self.renderer = Renderer:new(16)
 

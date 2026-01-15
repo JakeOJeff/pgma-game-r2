@@ -10,9 +10,9 @@ function Renderer:new(tileSize)
     r.tileset:setFilter("nearest", "nearest")
 
     r.quads = {
-        floor = love.graphics.newQuad(0, 0, tileSize, tileSize,
+        floor = love.graphics.newQuad((5 - 1) * tileSize, 0, tileSize, tileSize,
                                       r.tileset:getDimensions()),
-        wall  = love.graphics.newQuad(tileSize, 0, tileSize, tileSize,
+        wall  = love.graphics.newQuad((7 - 1) * tileSize, (3 - 1) * tileSize, tileSize, tileSize,
                                       r.tileset:getDimensions())
     }
 
