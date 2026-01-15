@@ -9,10 +9,23 @@ function Renderer:new(tileSize)
     r.tileset = love.graphics.newImage("src/maps/tileset2.png")
     r.tileset:setFilter("nearest", "nearest")
 
+    -- TEXTURE POSITIONS 
+
+    local floorTile = {
+        xNo = 5,
+        yNo = 1
+    }
+
+    local wallTile = {
+        xNo = 7,
+        yNo = 3
+    }
+
+    
     r.quads = {
-        floor = love.graphics.newQuad((5 - 1) * tileSize, 0, tileSize, tileSize,
+        floor = love.graphics.newQuad((floorTile.xNo - 1) * tileSize, (floorTile.yNo - 1) * tileSize, tileSize, tileSize,
                                       r.tileset:getDimensions()),
-        wall  = love.graphics.newQuad((7 - 1) * tileSize, (3 - 1) * tileSize, tileSize, tileSize,
+        wall  = love.graphics.newQuad((wallTile.xNo - 1) * tileSize, (wallTile.yNo - 1) * tileSize, tileSize, tileSize,
                                       r.tileset:getDimensions())
     }
 
