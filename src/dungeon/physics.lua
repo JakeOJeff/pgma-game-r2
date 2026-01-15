@@ -21,6 +21,18 @@ function physics:build(dungeon)
                 local px = (x - 0.5) * TILE_SIZE
                 local py = (y - 0.5) * TILE_SIZE
 
+                if dungeon.tiles[y+1][x] and dungeon.tiles[y+1][x]~=1 then
+                    local px2 = (x-1) * TILE_SIZE
+                    local py2 = (y-1) * TILE_SIZE
+
+                    lighter:addPolygon({
+                        px2,py2,
+                        px2+TILE_SIZE,py2,
+                        px2+TILE_SIZE,py2+TILE_SIZE,
+                        px2,py2+TILE_SIZE
+                    })
+                end
+
                 local body = love.physics.newBody(World, px, py, "static")
                 local shape = love.physics.newRectangleShape(TILE_SIZE, TILE_SIZE)
                 local fixture = love.physics.newFixture(body, shape)

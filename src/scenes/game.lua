@@ -4,7 +4,10 @@ local Renderer = require("src.dungeon.renderer")
 
 local WallPhysics = require("src.dungeon.physics")
 
+local Lighter= require("src.libs.lighter-master")
+
 function game:load()
+    lighter=Lighter()
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
@@ -22,6 +25,7 @@ function game:load()
 
     player = require 'src.classes.player'
     player:load()
+    light=lighter:addLight(player.x,player.y,250,1, 0.988, 0.914)
 
     Scrap = require "src.classes.scrap"
 
@@ -42,6 +46,7 @@ function game:load()
     World:setCallbacks(beginContact)
 
 end
+
 function game:spawnPlayer()
     local tileX, tileY = self.dungeon:getRandomRoomCenter()
 
@@ -55,6 +60,7 @@ function game:spawnPlayer()
         player.physics.body:setLinearVelocity(0, 0)
     end
 end
+
 function game:spawnScrap(count)
     count = count or 20
 
@@ -79,10 +85,30 @@ function game:update(dt)
     local ny = player.y + player.speed * dt
 
     player:update(dt)
+    lighter:updateLight(light,player.x+player.width/2,player.y+player.height/2)
 
     cam:zoomTo(zoom)
     cam:lookAt(player.x, player.y)
 
+    
+
+end
+
+local w,h=love.window.getMode()
+local lightCanvas=lg.newCanvas(w,h)
+
+function preDrawLights()
+  love.graphics.setCanvas({ lightCanvas, stencil = true})
+  love.graphics.clear(0.3, 0.3, 0.3) -- Global illumination level
+  lighter:drawLights()
+  love.graphics.setCanvas()
+end
+
+-- Call after you have drawn your scene (but before UI)
+function drawLights()
+  love.graphics.setBlendMode("multiply", "premultiplied")
+  love.graphics.draw(lightCanvas)
+  love.graphics.setBlendMode("alpha")
 end
 
 function game:draw()
@@ -106,7 +132,10 @@ function game:draw()
     player:draw()
     -- player:drawPhysics()
     -- self:drawPhysics()
+    preDrawLights()
+    
     cam:detach()
+    drawLights()
 end
 
 function game:keypressed(key)
