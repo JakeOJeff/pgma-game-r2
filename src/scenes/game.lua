@@ -12,7 +12,7 @@ function game:load()
 
     -- self:spawnCollisionObjectsFromTiled()
 
-    self.dungeon = Dungeon:new(50, 40)
+    self.dungeon = Dungeon:new(50, 40, 1200)
     self.dungeon:generate()
 
     self.renderer = Renderer:new(16)
