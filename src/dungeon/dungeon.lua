@@ -89,7 +89,7 @@ function Dungeon:connectRooms(roomA, roomB)
 end
 
 function Dungeon:generate(roomCount)
-    roomCount = roomCount or 8
+    roomCount = roomCount or 6
 
     math.randomseed(self.seed)
 
@@ -97,13 +97,15 @@ function Dungeon:generate(roomCount)
     self:fillWithWalls()
 
     for i = 1, roomCount do
-        local rw = math.random(8, 16)
-        local rh = math.random(8, 16)
+        local rw = math.random(4, 12)
+        local rh = math.random(4, 12)
 
         local rx = math.random(2, self.width - rw - 1)
         local ry = math.random(2, self.height - rh - 1)
 
-        self:carveRoom(rx, ry, rw, rh)
+        self:carveRoom(rx, ry, rw, rh)  
+
+        
 
         -- connect to previous room
         if i > 1 then

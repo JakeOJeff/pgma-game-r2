@@ -1,18 +1,16 @@
 local game = {}
-    local Dungeon = require("src.dungeon.dungeon")
-    local Renderer = require("src.dungeon.renderer")
-    local Collision = require("src.dungeon.collision")
+local Dungeon = require("src.dungeon.dungeon")
+local Renderer = require("src.dungeon.renderer")
+local Collision = require("src.dungeon.collision")
 
 local WallPhysics = require("src.dungeon.physics")
 
-
-    function game:load()
+function game:load()
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
     sti = require 'src.libs.sti'
     -- gameMap = sti('src/maps/game.lua')
-
 
     -- self:spawnCollisionObjectsFromTiled()
 
@@ -20,7 +18,6 @@ local WallPhysics = require("src.dungeon.physics")
     self.dungeon:generate()
 
     WallPhysics:build(World, self.dungeon)
-
 
     self.renderer = Renderer:new(16)
 
@@ -31,19 +28,17 @@ local WallPhysics = require("src.dungeon.physics")
 
     camera = require 'src.libs.camera'
     cam = camera(player.x, player.y, zoom)
-self:spawnPlayer()
-self:spawnScrap(30)
+    self:spawnPlayer()
+    self:spawnScrap(30)
 
     -- gameMap.layers.blocks.visible = false
     -- gameMap.layers.entities.visible = false
-
 
     -- for i, v in ipairs(gameMap.layers.entities.objects) do
     --     if v.name == "scrap" then 
     --         Scrap:new(v.x + v.width / 2, v.y + v.height / 2)
     --     end
     -- end
-
 
     World:setCallbacks(beginContact)
 
@@ -91,33 +86,31 @@ function game:update(dt)
     if not Collision:isBlocked(self.dungeon, player.x, ny, player.width, player.height) then
         player.y = ny
     end
-        player:update(dt)
+    player:update(dt)
 
-
-        cam:zoomTo(zoom)
-        cam:lookAt(player.x, player.y)
-
+    cam:zoomTo(zoom)
+    cam:lookAt(player.x, player.y)
 
 end
 
 function game:draw()
-   
-        lg.setColor(1, 1, 1, 1)
-        cam:attach()
-        -- gameMap:drawLayer(gameMap.layers["Ground"])
-        -- gameMap:drawLayer(gameMap.layers["Trees"])
-        -- for k, v in ipairs(gameMap.layers) do
-        --     if v.visible and v.opacity > 0 then
-        --         gameMap:drawLayer(v)
-        --     end
-        -- end
+
+    lg.setColor(1, 1, 1, 1)
+    cam:attach()
+    -- gameMap:drawLayer(gameMap.layers["Ground"])
+    -- gameMap:drawLayer(gameMap.layers["Trees"])
+    -- for k, v in ipairs(gameMap.layers) do
+    --     if v.visible and v.opacity > 0 then
+    --         gameMap:drawLayer(v)
+    --     end
+    -- end
     self.renderer:draw(self.dungeon)
 
-        Scrap:drawAll()
-        player:draw()
-        -- player:drawPhysics()
-        -- self:drawPhysics()
-        cam:detach()
+    Scrap:drawAll()
+    player:draw()
+    -- player:drawPhysics()
+    -- self:drawPhysics()
+    cam:detach()
 end
 
 function game:keypressed(key)
