@@ -113,6 +113,8 @@ function Dungeon:generate(roomCount)
         end
 
     end
+
+    self:createWalls()
 end
 function Dungeon:getRandomFloorTile()
     while true do
@@ -149,6 +151,43 @@ function Dungeon:findClosestRoom(room)
     end
 
     return closest
+end
+
+function Dungeon:createWalls()
+
+    for y = 1, self.height do
+        for x = 1, self.width do
+            self:checkAdjacent(x, y, 2)
+        end
+    end
+    
+end
+
+
+
+
+function Dungeon:checkAdjacent(x, y, id)
+    local found = false
+
+    for i = -1, 1 do
+        for j = -1, 1 do
+            -- skip the center tile
+            if not (i == 0 and j == 0) then
+                local ny = y + i
+                local nx = x + j
+
+                if self.tiles[ny] and self.tiles[ny][nx] == 1 then
+                    found = true
+                    break
+                end
+            end
+        end
+        if found then break end
+    end
+
+    if found and self.tiles[y][x] ~= 1 then
+        self.tiles[y][x] = id
+    end
 end
 
 return Dungeon

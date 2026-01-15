@@ -28,7 +28,7 @@ wH = lg.getHeight()
 
 scale = wW/defW -- Scale Value
 
-zoomDefault = 4
+zoomDefault = 1
 zoom = zoomDefault * scale
 
 World = love.physics.newWorld(0, 2000)
