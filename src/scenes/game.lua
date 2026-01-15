@@ -95,7 +95,7 @@ function game:update(dt)
 end
 
 local w,h=love.window.getMode()
-local lightCanvas=lg.newCanvas(w,h)
+lightCanvas=lg.newCanvas(w,h)
 
 function preDrawLights()
   love.graphics.setCanvas({ lightCanvas, stencil = true})

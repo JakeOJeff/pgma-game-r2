@@ -48,7 +48,7 @@ function love.resize(w, h)
 
     scale = wW / defW
     zoom = zoomDefault * scale
-
+    lightCanvas=lg.newCanvas(w,h)
 end
 
 
