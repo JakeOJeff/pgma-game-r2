@@ -1,29 +1,96 @@
-local intro = {}
+local game = {}
+    local Dungeon = require("src.dungeon.dungeon")
+    local Renderer = require("src.dungeon.renderer")
+    local Collision = require("src.dungeon.collision")
 
-function intro:load()
+local WallPhysics = require("src.dungeon.physics")
+
+
+    function game:load()
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
     sti = require 'src.libs.sti'
-    gameMap = sti('src/maps/game.lua')
+    -- gameMap = sti('src/maps/game.lua')
+
+
+    -- self:spawnCollisionObjectsFromTiled()
+
+    self.dungeon = Dungeon:new(100, 100, 1200)
+    self.dungeon:generate()
+
+    WallPhysics:build(World, self.dungeon)
+
+
+    self.renderer = Renderer:new(16)
 
     player = require 'src.classes.player'
     player:load()
 
+    Scrap = require "src.classes.scrap"
+
     camera = require 'src.libs.camera'
     cam = camera(player.x, player.y, zoom)
+self:spawnPlayer()
+self:spawnScrap(30)
 
-    self:spawnCollisionObjectsFromTiled()
+    -- gameMap.layers.blocks.visible = false
+    -- gameMap.layers.entities.visible = false
 
-    gameMap.layers.blocks.visible = false
-    gameMap.layers.entities.visible = false
+
+    -- for i, v in ipairs(gameMap.layers.entities.objects) do
+    --     if v.name == "scrap" then 
+    --         Scrap:new(v.x + v.width / 2, v.y + v.height / 2)
+    --     end
+    -- end
+
+
+    World:setCallbacks(beginContact)
 
 end
+function game:spawnPlayer()
+    local tileX, tileY = self.dungeon:getRandomRoomCenter()
 
-function intro:update(dt)
+    local tileSize = 16
+    player.x = (tileX - 0.5) * tileSize
+    player.y = (tileY - 0.5) * tileSize
+
+    -- sync physics body if player uses physics
+    if player.physics and player.physics.body then
+        player.physics.body:setPosition(player.x, player.y)
+        player.physics.body:setLinearVelocity(0, 0)
+    end
+end
+function game:spawnScrap(count)
+    count = count or 20
+
+    local tileSize = 16
+
+    for i = 1, count do
+        local tx, ty = self.dungeon:getRandomFloorTile()
+
+        local x = (tx - 0.5) * tileSize
+        local y = (ty - 0.5) * tileSize
+
+        Scrap:new(x, y)
+    end
+end
+
+function game:update(dt)
     World:update(dt)
     input:update()
 
+    Scrap:updateAll()
+    local nx = player.x + player.speed * dt
+    local ny = player.y + player.speed * dt
+
+    if not Collision:isBlocked(self.dungeon, nx, player.y, player.width, player.height) then
+        player.x = nx
+    end
+
+    if not Collision:isBlocked(self.dungeon, player.x, ny, player.width, player.height) then
+        player.y = ny
+    end
         player:update(dt)
 
 
@@ -33,40 +100,43 @@ function intro:update(dt)
 
 end
 
-function intro:draw()
+function game:draw()
    
         lg.setColor(1, 1, 1, 1)
         cam:attach()
         -- gameMap:drawLayer(gameMap.layers["Ground"])
         -- gameMap:drawLayer(gameMap.layers["Trees"])
-        for k, v in ipairs(gameMap.layers) do
-            if v.visible and v.opacity > 0 then
-                gameMap:drawLayer(v)
-            end
-        end
+        -- for k, v in ipairs(gameMap.layers) do
+        --     if v.visible and v.opacity > 0 then
+        --         gameMap:drawLayer(v)
+        --     end
+        -- end
+    self.renderer:draw(self.dungeon)
+
+        Scrap:drawAll()
         player:draw()
         player:drawPhysics()
         self:drawPhysics()
         cam:detach()
 end
 
-function intro:keypressed(key)
+function game:keypressed(key)
     self:inputReceived()
 end
 
-function intro:gamepadpressed(joystick, button)
+function game:gamepadpressed(joystick, button)
     self:inputReceived()
 end
 
-function intro:mousepressed(x, y, button)
+function game:mousepressed(x, y, button)
     self:inputReceived()
 end
 
-function intro:inputReceived()
+function game:inputReceived()
 
 end
 
-function intro:spawnCollisionObjectsFromTiled()
+function game:spawnCollisionObjectsFromTiled()
     self.colliders = {}
 
     local layer = gameMap.layers["blocks"]
@@ -87,21 +157,21 @@ function intro:spawnCollisionObjectsFromTiled()
 end
 
 -- TEMPORARY DEBUG
-function intro:drawPhysics()
+function game:drawPhysics()
     lg.setColor(1, 0, 0, 0.6)
 
-    for _, collider in ipairs(self.colliders) do
-        local body = collider.body
-        local shape = collider.shape
+    -- for _, collider in ipairs(self.colliders) do
+    --     local body = collider.body
+    --     local shape = collider.shape
 
-        local points = {body:getWorldPoints(shape:getPoints())}
-        lg.polygon("line", points)
-    end
+    --     local points = {body:getWorldPoints(shape:getPoints())}
+    --     lg.polygon("line", points)
+    -- end
 
     lg.setColor(1, 1, 1, 1)
 end
 
-function intro:findObject(objName)
+function game:findObject(objName)
 
     for _, obj in ipairs(gameMap.layers["entities"].objects) do
         if obj.name == objName then
@@ -111,4 +181,4 @@ function intro:findObject(objName)
 
 end
 
-return intro
+return game

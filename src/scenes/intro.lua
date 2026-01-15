@@ -20,6 +20,8 @@ function intro:load()
     self.cTimer = 0
     self.fadeTimer = 0
 
+    self.colliders={}
+
     self.elevatorCutscene = false
 
     self.floor = 4 -- Starting floor
@@ -34,7 +36,7 @@ function intro:load()
     introMap.layers.blocks.visible = false
     introMap.layers.entities.visible = false
 
-    World:setCallbacks()
+    World:setCallbacks(beginContact,endContact)
 
 end
 

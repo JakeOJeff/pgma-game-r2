@@ -9,7 +9,7 @@ function Scrap:new(x, y)
     self.x = x 
     self.y = y
 
-    self.img = love.graphics.newImage()
+    self.img = love.graphics.newImage("assets/sprites/scrap.png")
 
     self.width = self.img:getWidth()
     self.height = self.img:getHeight()
@@ -20,13 +20,13 @@ function Scrap:new(x, y)
 
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "static")
-    self.physics.shape = love.physics.newBody(self.width, self.height)
+    self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
 
     self.physics.fixture:setSensor(true)
+    table.insert(ActiveScraps, self)
 
     return self
-
 end
 
 function Scrap:update(dt)
@@ -40,7 +40,7 @@ function Scrap:remove()
         if v == self then
             self.physics.body:destroy() 
             table.remove(ActiveScraps, i)
-            Player.collectedScraps = Player.collectedScraps + 1             
+            player.collectedScraps = player.collectedScraps + 1             
         end
     end
 end
@@ -69,6 +69,9 @@ end
 
 
 function Scrap:draw()
+    lg.setColor(0, 0, 0, 0.5)
+        love.graphics.draw(self.img, self.x, self.y + math.abs(self.scaleX) * 4, 0, self.scaleX, 1, self.width/2 , self.height /2)
+    lg.setColor(1,1,1,1)
     love.graphics.draw(self.img, self.x, self.y + self.scaleX * 4, 0, self.scaleX, 1, self.width/2 , self.height /2)
 end
 
@@ -90,3 +93,5 @@ function Scrap.beginContact(a, b, collision)
     end
 end
 
+
+return Scrap
