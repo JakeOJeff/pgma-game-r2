@@ -5,6 +5,8 @@ Dungeon.__index = Dungeon
 -- 1 = floor
 -- 2 = wall
 
+local TUNNEL_WIDTH = 2
+
 function Dungeon:new(w, h, seed)
     local d = setmetatable({}, Dungeon)
 
@@ -33,7 +35,8 @@ function Dungeon:carveRoom(rx, ry, rw, rh)
     for y = ry, ry + rh - 1 do
         for x = rx, rx + rw - 1 do
             if x > 1 and y > 1 and x < self.width and y < self.height then
-                self.tiles[y][x] = 1
+self.tiles[y][x] = 1
+
             end
         end
     end
@@ -43,16 +46,22 @@ function Dungeon:carveRoom(rx, ry, rw, rh)
     local centerY = math.floor(ry + rh / 2)
 
     table.insert(self.rooms, {
-        x = rx, y = ry, w = rw, h = rh,
-        cx = centerX, cy = centerY
+        x = rx,
+        y = ry,
+        w = rw,
+        h = rh,
+        cx = centerX,
+        cy = centerY
     })
 end
 
 -- carve a horizontal tunnel
 function Dungeon:carveHTunnel(x1, x2, y)
     for x = math.min(x1, x2), math.max(x1, x2) do
-        if x > 1 and x < self.width and y > 1 and y < self.height then
-            self.tiles[y][x] = 1
+        for w = 0, TUNNEL_WIDTH - 1 do
+            if x > 1 and x < self.width and y + w > 1 and y + w < self.height then
+                self.tiles[y + w][x] = 1
+            end
         end
     end
 end
@@ -60,8 +69,10 @@ end
 -- carve a vertical tunnel
 function Dungeon:carveVTunnel(y1, y2, x)
     for y = math.min(y1, y2), math.max(y1, y2) do
-        if x > 1 and x < self.width and y > 1 and y < self.height then
-            self.tiles[y][x] = 1
+        for w = 0, TUNNEL_WIDTH - 1 do
+            if y > 1 and y < self.height and x + w > 1 and x + w < self.width then
+                self.tiles[y][x + w] = 1
+            end
         end
     end
 end
@@ -86,8 +97,8 @@ function Dungeon:generate(roomCount)
     self:fillWithWalls()
 
     for i = 1, roomCount do
-        local rw = math.random(4, 8)
-        local rh = math.random(4, 8)
+        local rw = math.random(8, 16)
+        local rh = math.random(8, 16)
 
         local rx = math.random(2, self.width - rw - 1)
         local ry = math.random(2, self.height - rh - 1)

@@ -16,7 +16,7 @@ local WallPhysics = require("src.dungeon.physics")
 
     -- self:spawnCollisionObjectsFromTiled()
 
-    self.dungeon = Dungeon:new(50, 40, 1200)
+    self.dungeon = Dungeon:new(100, 100, 1200)
     self.dungeon:generate()
 
     WallPhysics:build(World, self.dungeon)
