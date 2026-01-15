@@ -31,7 +31,8 @@ local WallPhysics = require("src.dungeon.physics")
 
     camera = require 'src.libs.camera'
     cam = camera(player.x, player.y, zoom)
-
+self:spawnPlayer()
+self:spawnScrap(30)
 
     -- gameMap.layers.blocks.visible = false
     -- gameMap.layers.entities.visible = false
@@ -46,6 +47,33 @@ local WallPhysics = require("src.dungeon.physics")
 
     World:setCallbacks(beginContact)
 
+end
+function game:spawnPlayer()
+    local tileX, tileY = self.dungeon:getRandomRoomCenter()
+
+    local tileSize = 16
+    player.x = (tileX - 0.5) * tileSize
+    player.y = (tileY - 0.5) * tileSize
+
+    -- sync physics body if player uses physics
+    if player.physics and player.physics.body then
+        player.physics.body:setPosition(player.x, player.y)
+        player.physics.body:setLinearVelocity(0, 0)
+    end
+end
+function game:spawnScrap(count)
+    count = count or 20
+
+    local tileSize = 16
+
+    for i = 1, count do
+        local tx, ty = self.dungeon:getRandomFloorTile()
+
+        local x = (tx - 0.5) * tileSize
+        local y = (ty - 0.5) * tileSize
+
+        Scrap:new(x, y)
+    end
 end
 
 function game:update(dt)

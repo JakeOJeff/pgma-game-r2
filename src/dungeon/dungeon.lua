@@ -35,7 +35,7 @@ function Dungeon:carveRoom(rx, ry, rw, rh)
     for y = ry, ry + rh - 1 do
         for x = rx, rx + rw - 1 do
             if x > 1 and y > 1 and x < self.width and y < self.height then
-self.tiles[y][x] = 1
+                self.tiles[y][x] = 1
 
             end
         end
@@ -107,9 +107,48 @@ function Dungeon:generate(roomCount)
 
         -- connect to previous room
         if i > 1 then
-            self:connectRooms(self.rooms[i - 1], self.rooms[i])
+            local currentRoom = self.rooms[i]
+            local closestRoom = self:findClosestRoom(currentRoom)
+            self:connectRooms(closestRoom, currentRoom)
+        end
+
+    end
+end
+function Dungeon:getRandomFloorTile()
+    while true do
+        local x = math.random(2, self.width - 1)
+        local y = math.random(2, self.height - 1)
+
+        if self.tiles[y][x] == 1 then
+            return x, y
         end
     end
+end
+function Dungeon:getRandomRoomCenter()
+    local room = self.rooms[math.random(#self.rooms)]
+    return room.cx, room.cy
+end
+
+function Dungeon:roomDistance(a, b)
+    local dx = a.cx - b.cx
+    local dy = a.cy - b.cy
+    return dx * dx + dy * dy -- squared distance (faster, no sqrt)
+end
+function Dungeon:findClosestRoom(room)
+    local closest = nil
+    local closestDist = math.huge
+
+    for i = 1, #self.rooms - 1 do
+        local other = self.rooms[i]
+        local dist = self:roomDistance(room, other)
+
+        if dist < closestDist then
+            closestDist = dist
+            closest = other
+        end
+    end
+
+    return closest
 end
 
 return Dungeon
