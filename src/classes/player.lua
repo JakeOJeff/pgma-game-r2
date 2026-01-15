@@ -11,7 +11,7 @@ function player:load()
     self.height = 18
 
 
-    self.speed = 100
+    self.speed = 40
     self.friction = 1000
 
     self.spriteSheet = lg.newImage('assets/sprites/player-sheet.png')

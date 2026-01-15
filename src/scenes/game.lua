@@ -115,8 +115,8 @@ function game:draw()
 
         Scrap:drawAll()
         player:draw()
-        player:drawPhysics()
-        self:drawPhysics()
+        -- player:drawPhysics()
+        -- self:drawPhysics()
         cam:detach()
 end
 
