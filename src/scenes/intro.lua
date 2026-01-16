@@ -13,6 +13,7 @@ function intro:load()
     camera = require 'src.libs.camera'
     cam = camera(player.x, player.y, zoom)
 
+
     self.introCutscene = true
     self.scenes = {}
     self.sceneTexts = {"...", "'Boss Man asked me to give this to you'", "Oh lord, what is this"}
@@ -20,7 +21,6 @@ function intro:load()
     self.cTimer = 0
     self.fadeTimer = 0
 
-    self.colliders={}
 
     self.elevatorCutscene = false
 
@@ -30,8 +30,8 @@ function intro:load()
     for i = 1, 3 do
         self.scenes[i] = lg.newImage("assets/cutscenes/intro/frame" .. i .. ".png")
     end
+    self:spawnCollisionObjectsFromTiled()
 
-    World:setCallbacks(beginContact, endContact)
 
     introMap.layers.blocks.visible = false
     introMap.layers.entities.visible = false
