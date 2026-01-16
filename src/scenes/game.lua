@@ -90,6 +90,9 @@ function game:update(dt)
     cam:zoomTo(zoom)
     cam:lookAt(player.x, player.y)
 
+    cam.x = math.floor(cam.x * zoom)/zoom
+    cam.y = math.floor(cam.y * zoom)/zoom
+
     
 
 end

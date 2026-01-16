@@ -21,6 +21,10 @@ function Renderer:new(tileSize)
         yNo = 1
     }
 
+    local wallBottomTile = {
+        xNo = 6,
+        yNo = 1
+    }
     local emptyTile = {
         xNo = 7,
         yNo = 3
@@ -30,6 +34,8 @@ function Renderer:new(tileSize)
         floor = love.graphics.newQuad((floorTile.xNo - 1) * tileSize, (floorTile.yNo - 1) * tileSize, tileSize, tileSize,
                                       r.tileset:getDimensions()),
         wall  = love.graphics.newQuad((wallTile.xNo - 1) * tileSize, (wallTile.yNo - 1) * tileSize, tileSize, tileSize,
+                                      r.tileset:getDimensions()),
+        wallBottom  = love.graphics.newQuad((wallBottomTile.xNo - 1) * tileSize, (wallBottomTile.yNo - 1) * tileSize, tileSize, tileSize,
                                       r.tileset:getDimensions()),
         hollow = love.graphics.newQuad((emptyTile.xNo - 1) * tileSize, (emptyTile.yNo - 1) * tileSize, tileSize, tileSize,
                                       r.tileset:getDimensions()),

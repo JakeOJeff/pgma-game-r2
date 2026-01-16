@@ -4,7 +4,8 @@ Dungeon.__index = Dungeon
 -- tiles:
 -- 1 = floor
 -- 2 = wall
--- 3 = hollow
+-- 3 = wallBottom
+-- 0 = hollow
 
 local TUNNEL_WIDTH = 2
 
@@ -26,7 +27,7 @@ function Dungeon:fillWithWalls()
     for y = 1, self.height do
         self.tiles[y] = {}
         for x = 1, self.width do
-            self.tiles[y][x] = 3
+            self.tiles[y][x] = 0
         end
     end
 end
@@ -105,7 +106,7 @@ function Dungeon:generate(roomCount)
 
         self:carveRoom(rx, ry, rw, rh)  
 
-        
+
 
         -- connect to previous room
         if i > 1 then

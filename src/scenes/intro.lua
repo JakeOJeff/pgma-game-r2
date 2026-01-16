@@ -149,8 +149,8 @@ function intro:draw()
             end
         end
         player:draw()
-        player:drawPhysics()
-        self:drawPhysics()
+        -- player:drawPhysics()
+        -- self:drawPhysics()
         cam:detach()
     end
 end
