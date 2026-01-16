@@ -22,6 +22,7 @@ function Dungeon:new(w, h, seed)
 
     d.tiles = {}
     d.rooms = {}
+    
 
     return d
 end
@@ -113,7 +114,7 @@ function Dungeon:connectRooms(roomA, roomB)
         self:carveVTunnel(roomA.cy, roomB.cy, roomA.cx)
         self:carveHTunnel(roomA.cx, roomB.cx, roomB.cy)
 
-        -- FIX: fill corner
+        -- FIX: fill corner .
         self:carveCorner(roomA.cx, roomB.cy)
     end
 end
@@ -200,7 +201,7 @@ end
 
 function Dungeon:createWalls()
     for y = 1, self.height do
-        for x = 1, self.width do
+        for x = 1, self.width do 
             -- enable when ready:
             self:checkBottomAdjacents(x, y)
             self:checkTopAdjacents(x, y)

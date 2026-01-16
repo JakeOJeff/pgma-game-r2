@@ -16,7 +16,7 @@ function game:load()
 
     -- self:spawnCollisionObjectsFromTiled()
 
-    self.dungeon = Dungeon:new(50, 50, 1200)
+    self.dungeon = Dungeon:new(50, 50, love.timer.getTime())
     self.dungeon:generate()
 
     WallPhysics:build(self.dungeon)
@@ -27,6 +27,7 @@ function game:load()
     player:load()
     light=lighter:addLight(player.x,player.y,250,1, 0.988, 0.914)
 
+    Textbox = require "src.classes.textbox"
     Scrap = require "src.classes.scrap"
 
     camera = require 'src.libs.camera'
@@ -42,6 +43,8 @@ function game:load()
     --         Scrap:new(v.x + v.width / 2, v.y + v.height / 2)
     --     end
     -- end
+
+    Textbox:new("Collected Scrap, ")
 
     World:setCallbacks(beginContact)
 
@@ -69,9 +72,10 @@ function game:spawnScrap(count)
     for i = 1, count do
         local tx, ty = self.dungeon:getRandomFloorTile()
 
-        local x = (tx - 0.5) * tileSize
+        local x = (tx + 0.5) * tileSize
         local y = (ty - 0.5) * tileSize
-
+        x = x + (0.5 * tileSize)
+        y = y + (0.5 * tileSize)
         Scrap:new(x, y)
     end
 end
@@ -93,7 +97,8 @@ function game:update(dt)
     cam.x = math.floor(cam.x * zoom)/zoom
     cam.y = math.floor(cam.y * zoom)/zoom
 
-    
+        Textbox.updateAll(dt)
+
 
 end
 
@@ -140,13 +145,17 @@ function game:draw()
     drawLights()
 
     -- UI
-    
+            Textbox.drawAll()
+
     love.graphics.setColor(1,1,1)
     lg.print(player.collectedScraps.."/6 scraps collected", 0, 0)
 end
 
 function game:keypressed(key)
     self:inputReceived()
+    if key == "r" then
+        self:load()
+    end
 end
 
 function game:gamepadpressed(joystick, button)

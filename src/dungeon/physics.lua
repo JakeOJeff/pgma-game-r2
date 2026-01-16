@@ -8,7 +8,7 @@ local TILE_SIZE = 16
 
 function physics:clear()
     for _, body in ipairs(self.bodies) do
-        body.distory()
+        body:destroy()
     end
     self.bodies={}
 end
