@@ -16,7 +16,7 @@ function game:load()
 
     -- self:spawnCollisionObjectsFromTiled()
 
-    self.dungeon = Dungeon:new(100, 100, 1200)
+    self.dungeon = Dungeon:new(50, 50, 1200)
     self.dungeon:generate()
 
     WallPhysics:build(self.dungeon)

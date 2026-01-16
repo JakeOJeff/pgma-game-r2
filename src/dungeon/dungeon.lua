@@ -3,8 +3,8 @@ Dungeon.__index = Dungeon
 
 -- tiles:
 -- 1 = floor
--- 2 = wall
--- 3 = wallBottom
+-- 2 = wall top
+-- 3 = wall
 -- 0 = hollow
 
 local TUNNEL_WIDTH = 2
@@ -26,28 +26,30 @@ function Dungeon:new(w, h, seed)
     return d
 end
 
--- fill entire map with walls
+-- =========================
+-- MAP INITIALIZATION
+-- =========================
 function Dungeon:fillWithWalls()
-    for x = 1, self.width do
-        self.tiles[x] = {}
-        for y = 1, self.height do
-            self.tiles[x][y] = 0
+    for y = 1, self.height do
+        self.tiles[y] = {}
+        for x = 1, self.width do
+            self.tiles[y][x] = 0
         end
     end
 end
 
--- carve a rectangular room
+-- =========================
+-- ROOM CARVING
+-- =========================
 function Dungeon:carveRoom(rx, ry, rw, rh)
-            for x = rx, rx + rw - 1 do
-
     for y = ry, ry + rh - 1 do
-            if x > 1 and y > 1 and x < self.width and y < self.height  then 
-                self.tiles[x][y] = 1
+        for x = rx, rx + rw - 1 do
+            if x > 1 and y > 1 and x < self.width and y < self.height then
+                self.tiles[y][x] = FLOOR
             end
         end
     end
 
-    -- store room center
     local centerX = math.floor(rx + rw / 2)
     local centerY = math.floor(ry + rh / 2)
 
@@ -61,109 +63,113 @@ function Dungeon:carveRoom(rx, ry, rw, rh)
     })
 end
 
--- carve a horizontal tunnel
+-- =========================
+-- TUNNELS
+-- =========================
 function Dungeon:carveHTunnel(x1, x2, y)
     for x = math.min(x1, x2), math.max(x1, x2) do
         for w = 0, TUNNEL_WIDTH - 1 do
-            if x > 1 and x < self.width and y + w > 1 and y + w < self.height then
-                self.tiles[y + w][x] = 1
+            local ny = y + w
+            if ny > 1 and ny < self.height then
+                self.tiles[ny][x] = FLOOR
             end
         end
     end
 end
 
--- carve a vertical tunnel
 function Dungeon:carveVTunnel(y1, y2, x)
     for y = math.min(y1, y2), math.max(y1, y2) do
         for w = 0, TUNNEL_WIDTH - 1 do
-            if y > 1 and y < self.height and x + w > 1 and x + w < self.width then
-                self.tiles[y][x + w] = 1
+            local nx = x + w
+            if nx > 1 and nx < self.width then
+                self.tiles[y][nx] = FLOOR
+            end
+        end
+    end
+end
+function Dungeon:carveCorner(cx, cy)
+    for dy = 0, TUNNEL_WIDTH - 1 do
+        for dx = 0, TUNNEL_WIDTH - 1 do
+            local y = cy + dy
+            local x = cx + dx
+            if y > 1 and y < self.height and x > 1 and x < self.width then
+                self.tiles[y][x] = FLOOR
             end
         end
     end
 end
 
--- connect two rooms with an L-shaped corridor
 function Dungeon:connectRooms(roomA, roomB)
     if math.random() < 0.5 then
+        -- horizontal then vertical
         self:carveHTunnel(roomA.cx, roomB.cx, roomA.cy)
         self:carveVTunnel(roomA.cy, roomB.cy, roomB.cx)
+
+        -- FIX: fill corner
+        self:carveCorner(roomB.cx, roomA.cy)
+
     else
+        -- vertical then horizontal
         self:carveVTunnel(roomA.cy, roomB.cy, roomA.cx)
         self:carveHTunnel(roomA.cx, roomB.cx, roomB.cy)
+
+        -- FIX: fill corner
+        self:carveCorner(roomA.cx, roomB.cy)
     end
 end
 
+-- =========================
+-- GENERATION
+-- =========================
 function Dungeon:generate(roomCount)
     roomCount = roomCount or 6
-
     math.randomseed(self.seed)
 
     self.rooms = {}
     self:fillWithWalls()
 
     for i = 1, roomCount do
-        local rw = math.random(4, 12)
-        local rh = math.random(4, 12)
+        local rw = math.random(8, 12)
+        local rh = math.random(8, 12)
 
         local rx = math.random(2, self.width - rw - 1)
         local ry = math.random(2, self.height - rh - 1)
 
-        self:carveRoom(rx, ry, rw, rh)  
+        self:carveRoom(rx, ry, rw, rh)
 
-
-
-        -- connect to previous room
         if i > 1 then
             local currentRoom = self.rooms[i]
-            local closestRoom = self:findClosestRoom(currentRoom)
-            self:connectRooms(closestRoom, currentRoom)
+            local prevRoom = self.rooms[i - 1]
+            self:connectRooms(prevRoom, currentRoom)
         end
-
     end
 
     self:createWalls()
 end
+
+-- =========================
+-- HELPERS
+-- =========================
 function Dungeon:getRandomFloorTile()
     while true do
         local x = math.random(2, self.width - 1)
         local y = math.random(2, self.height - 1)
 
-        if self.tiles[y][x] == 1 then
+        if self.tiles[y][x] == FLOOR then
             return x, y
         end
     end
 end
+
 function Dungeon:getRandomRoomCenter()
     local room = self.rooms[math.random(#self.rooms)]
     return room.cx, room.cy
 end
 
-function Dungeon:roomDistance(a, b)
-    local dx = a.cx - b.cx
-    local dy = a.cy - b.cy
-    return dx * dx + dy * dy -- squared distance (faster, no sqrt)
-end
-function Dungeon:findClosestRoom(room)
-    local closest = nil
-    local closestDist = math.huge
-
-    for i = 1, #self.rooms - 1 do
-        local other = self.rooms[i]
-        local dist = self:roomDistance(room, other)
-
-        if dist < closestDist then
-            closestDist = dist
-            closest = other
-        end
-    end
-
-    return closest
-end
-
-
+-- =========================
+-- WALL LOGIC (READY FOR USE)
+-- =========================
 function Dungeon:checkTopAdjacents(x, y)
-    -- do not overwrite floor
     if self.tiles[y][x] == FLOOR then return end
 
     for dy = 1, TOP_CHECK_DEPTH do
@@ -180,10 +186,9 @@ function Dungeon:checkBottomAdjacents(x, y)
 
     for dy = -1, 1 do
         for dx = -1, 1 do
-            if not (dx == 0 and dy == 0) then
+            if dx ~= 0 or dy ~= 0 then
                 local ny = y + dy
                 local nx = x + dx
-
                 if self.tiles[ny] and self.tiles[ny][nx] == FLOOR then
                     self.tiles[y][x] = WALL
                     return
@@ -192,11 +197,12 @@ function Dungeon:checkBottomAdjacents(x, y)
         end
     end
 end
+
 function Dungeon:createWalls()
     for y = 1, self.height do
         for x = 1, self.width do
-                        self:checkBottomAdjacents(x, y)
-
+            -- enable when ready:
+            self:checkBottomAdjacents(x, y)
             self:checkTopAdjacents(x, y)
         end
     end
