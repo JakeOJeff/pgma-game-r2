@@ -23,7 +23,7 @@ function Renderer:new(tileSize)
 
     local wallBottomTile = {
         xNo = 6,
-        yNo = 1
+        yNo = 3
     }
     local emptyTile = {
         xNo = 7,
@@ -48,7 +48,7 @@ function Renderer:draw(dungeon)
         for x = 1, dungeon.width do
             local tile = dungeon.tiles[y][x]
             if tile ~= 0 then
-                local quad = (tile == 1) and self.quads.floor or (tile == 2 and self.quads.wall) or self.quads.hollow
+                local quad = (tile == 1) and self.quads.floor or (tile == 2 and self.quads.wall) or (tile == 3 and self.quads.wallBottom) or self.quads.hollow
                 love.graphics.draw(
                     self.tileset,
                     quad,

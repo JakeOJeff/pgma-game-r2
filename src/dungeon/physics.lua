@@ -17,11 +17,11 @@ function physics:build(dungeon)
 
     for y = 1, dungeon.height do
         for x = 1, dungeon.width do
-            if dungeon.tiles[y][x] == 2 then
+            if dungeon.tiles[y][x] == 2 or dungeon.tiles[y][x] == 3 then
                 local px = (x - 0.5) * TILE_SIZE
                 local py = (y - 0.5) * TILE_SIZE
 
-                if dungeon.tiles[y+1][x] and dungeon.tiles[y+1][x]~=1 then
+                if dungeon.tiles[y+1][x] and dungeon.tiles[y+1][x]~=1 and dungeon.tiles[y][x]~=2 then
                     local px2 = (x-1) * TILE_SIZE
                     local py2 = (y-1) * TILE_SIZE
 

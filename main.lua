@@ -28,7 +28,7 @@ wH = lg.getHeight()
 
 scale = wW/defW -- Scale Value
 
-zoomDefault = 5
+zoomDefault = 2
 zoom = zoomDefault * scale
 
 World = love.physics.newWorld(0, 2000)
@@ -36,8 +36,8 @@ World = love.physics.newWorld(0, 2000)
 local scenery = SceneryInit(
     -- { path = "path.to.scene1"; key = "scene1";  },
     { path = "src.scenes.menu"; key = "menu"},
-        { path = "src.scenes.intro"; key = "intro"; default = "true"},
-    { path = "src.scenes.game"; key = "game"}
+        { path = "src.scenes.intro"; key = "intro"},
+    { path = "src.scenes.game"; key = "game"; default = "true"}
 
 )
 

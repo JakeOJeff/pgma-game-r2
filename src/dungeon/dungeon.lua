@@ -8,6 +8,10 @@ Dungeon.__index = Dungeon
 -- 0 = hollow
 
 local TUNNEL_WIDTH = 2
+local FLOOR = 1
+local WALL_TOP = 2
+local WALL = 3
+local TOP_CHECK_DEPTH = 3
 
 function Dungeon:new(w, h, seed)
     local d = setmetatable({}, Dungeon)
@@ -24,20 +28,21 @@ end
 
 -- fill entire map with walls
 function Dungeon:fillWithWalls()
-    for y = 1, self.height do
-        self.tiles[y] = {}
-        for x = 1, self.width do
-            self.tiles[y][x] = 0
+    for x = 1, self.width do
+        self.tiles[x] = {}
+        for y = 1, self.height do
+            self.tiles[x][y] = 0
         end
     end
 end
 
 -- carve a rectangular room
 function Dungeon:carveRoom(rx, ry, rw, rh)
+            for x = rx, rx + rw - 1 do
+
     for y = ry, ry + rh - 1 do
-        for x = rx, rx + rw - 1 do
             if x > 1 and y > 1 and x < self.width and y < self.height  then 
-                self.tiles[y][x] = 1
+                self.tiles[x][y] = 1
             end
         end
     end
@@ -156,40 +161,44 @@ function Dungeon:findClosestRoom(room)
     return closest
 end
 
-function Dungeon:createWalls()
 
-    for y = 1, self.height do
-        for x = 1, self.width do
-            self:checkAdjacent(x, y, 2)
+function Dungeon:checkTopAdjacents(x, y)
+    -- do not overwrite floor
+    if self.tiles[y][x] == FLOOR then return end
+
+    for dy = 1, TOP_CHECK_DEPTH do
+        local ny = y + dy
+        if self.tiles[ny] and self.tiles[ny][x] == FLOOR then
+            self.tiles[y][x] = WALL_TOP
+            return
         end
     end
-    
 end
 
+function Dungeon:checkBottomAdjacents(x, y)
+    if self.tiles[y][x] == FLOOR then return end
 
+    for dy = -1, 1 do
+        for dx = -1, 1 do
+            if not (dx == 0 and dy == 0) then
+                local ny = y + dy
+                local nx = x + dx
 
-
-function Dungeon:checkAdjacent(x, y, id)
-    local found = false
-
-    for i = -1, 1 do
-        for j = -1, 1 do
-            -- skip the center tile
-            if not (i == 0 and j == 0) then
-                local ny = y + i
-                local nx = x + j
-
-                if self.tiles[ny] and self.tiles[ny][nx] == 1 then
-                    found = true
-                    break
+                if self.tiles[ny] and self.tiles[ny][nx] == FLOOR then
+                    self.tiles[y][x] = WALL
+                    return
                 end
             end
         end
-        if found then break end
     end
+end
+function Dungeon:createWalls()
+    for y = 1, self.height do
+        for x = 1, self.width do
+                        self:checkBottomAdjacents(x, y)
 
-    if found and self.tiles[y][x] ~= 1 then
-        self.tiles[y][x] = id
+            self:checkTopAdjacents(x, y)
+        end
     end
 end
 
