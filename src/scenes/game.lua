@@ -32,7 +32,7 @@ function game:load()
     camera = require 'src.libs.camera'
     cam = camera(player.x, player.y, zoom)
     self:spawnPlayer()
-    self:spawnScrap(30)
+    self:spawnScrap(6)
 
     -- gameMap.layers.blocks.visible = false
     -- gameMap.layers.entities.visible = false
@@ -62,10 +62,10 @@ function game:spawnPlayer()
 end
 
 function game:spawnScrap(count)
-    count = count or 20
+    count = count or 6
 
     local tileSize = 16
-
+     
     for i = 1, count do
         local tx, ty = self.dungeon:getRandomFloorTile()
 
@@ -119,8 +119,6 @@ function game:draw()
     lg.setColor(1, 1, 1, 1)
     cam:attach()
 
-    cam.x = math.floor(cam.x * zoom) / zoom
-    cam.y = math.floor(cam.y * zoom) / zoom
 
     -- gameMap:drawLayer(gameMap.layers["Ground"])
     -- gameMap:drawLayer(gameMap.layers["Trees"])
@@ -137,8 +135,14 @@ function game:draw()
     -- self:drawPhysics()
     preDrawLights()
     
+
     cam:detach()
     drawLights()
+
+    -- UI
+    
+    love.graphics.setColor(1,1,1)
+    lg.print(player.collectedScraps.."/6 scraps collected", 0, 0)
 end
 
 function game:keypressed(key)

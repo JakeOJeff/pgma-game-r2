@@ -33,7 +33,17 @@ function player:load()
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
-    self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
+        -- height of foot collider
+    local FOOT_HEIGHT = self.height / 3
+    local FOOT_OFFSET_Y = (self.height - FOOT_HEIGHT) / 2
+
+    self.physics.shape = love.physics.newRectangleShape(
+        0,
+        FOOT_OFFSET_Y,
+        self.width,
+        FOOT_HEIGHT
+    )
+
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)
 end
