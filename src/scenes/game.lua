@@ -5,7 +5,6 @@ local Renderer = require("src.dungeon.renderer")
 local WallPhysics = require("src.dungeon.physics")
 
 local Lighter= require("src.libs.lighter-master")
-
 function game:load()
     lighter=Lighter()
     anim8 = require 'src.libs.anim8'
@@ -28,6 +27,10 @@ function game:load()
     light=lighter:addLight(player.x,player.y,250,1, 0.988, 0.914)
 
     Textbox = require "src.classes.textbox"
+    scrapMessage = Textbox:new("Collected Scrap", wW/2 - 150, wH/2 - 75, 0, 300, 150)
+
+    
+    
     Scrap = require "src.classes.scrap"
 
     camera = require 'src.libs.camera'
@@ -44,7 +47,7 @@ function game:load()
     --     end
     -- end
 
-    Textbox:new("Collected Scrap, ")
+    
 
     World:setCallbacks(beginContact)
 
