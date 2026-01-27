@@ -218,5 +218,4 @@ function Dungeon:createWalls()
         end
     end
 end
-
 return Dungeon

@@ -6,14 +6,17 @@ local WallPhysics = require("src.dungeon.physics")
 
 local Lighter= require("src.libs.lighter-master")
 function game:load()
+    -- CLEAR OLD PHYSICS WORLD
+    if World then
+        World:destroy()
+    end
+    World = love.physics.newWorld(0, 0, true)
+    
     lighter=Lighter()
     anim8 = require 'src.libs.anim8'
     lg.setDefaultFilter("nearest", "nearest")
 
     sti = require 'src.libs.sti'
-    -- gameMap = sti('src/maps/game.lua')
-
-    -- self:spawnCollisionObjectsFromTiled()
 
     self.dungeon = Dungeon:new(50, 50, love.timer.getTime())
     self.dungeon:generate()
@@ -23,34 +26,24 @@ function game:load()
     self.renderer = Renderer:new(16)
 
     player = require 'src.classes.player'
-    player:load()
+    player:load()  -- Creates new physics body in new World
+    
+    -- NOW spawn player (this will update the newly created body's position)
+    self:spawnPlayer()
+    
     light=lighter:addLight(player.x,player.y,250,1, 0.988, 0.914)
 
     Textbox = require "src.classes.textbox"
     scrapMessage = Textbox:new("Collected Scrap", wW/2 - 150, wH/2 - 75, 0, 300, 150)
-
-    
     
     Scrap = require "src.classes.scrap"
 
     camera = require 'src.libs.camera'
     cam = camera(player.x, player.y, zoom)
-    self:spawnPlayer()
+    
     self:spawnScrap(6)
 
-    -- gameMap.layers.blocks.visible = false
-    -- gameMap.layers.entities.visible = false
-
-    -- for i, v in ipairs(gameMap.layers.entities.objects) do
-    --     if v.name == "scrap" then 
-    --         Scrap:new(v.x + v.width / 2, v.y + v.height / 2)
-    --     end
-    -- end
-
-    
-
     World:setCallbacks(beginContact)
-
 end
 
 function game:spawnPlayer()
