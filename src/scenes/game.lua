@@ -156,9 +156,6 @@ end
 
 function game:keypressed(key)
     self:inputReceived()
-    if key == "r" then
-        self:load()
-    end
 end
 
 function game:gamepadpressed(joystick, button)

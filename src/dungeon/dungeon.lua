@@ -200,11 +200,21 @@ function Dungeon:checkBottomAdjacents(x, y)
 end
 
 function Dungeon:createWalls()
+    -- First pass: mark all non-floor tiles adjacent to floor as WALL
     for y = 1, self.height do
-        for x = 1, self.width do 
-            -- enable when ready:
-            self:checkBottomAdjacents(x, y)
-            self:checkTopAdjacents(x, y)
+        for x = 1, self.width do
+            if self.tiles[y][x] == 0 then  -- Only check hollow tiles
+                self:checkBottomAdjacents(x, y)
+            end
+        end
+    end
+    
+    -- Second pass: mark top walls
+    for y = 1, self.height do
+        for x = 1, self.width do
+            if self.tiles[y][x] == WALL then  -- Only check tiles already marked as WALL
+                self:checkTopAdjacents(x, y)
+            end
         end
     end
 end

@@ -36,7 +36,7 @@ function intro:load()
     introMap.layers.blocks.visible = false
     introMap.layers.entities.visible = false
 
-    World:setCallbacks(beginContact,endContact)
+    World:setCallbacks(beginContact)
 
 end
 
@@ -106,6 +106,7 @@ function intro:update(dt)
 end
 
 function intro:draw()
+    love.graphics.setFont(font)
     if self.introCutscene then
         lg.setColor(1, 1, 1, self.fadeTimer)
 

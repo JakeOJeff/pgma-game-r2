@@ -36,10 +36,12 @@ World = love.physics.newWorld(0, 2000)
 local scenery = SceneryInit(
     -- { path = "path.to.scene1"; key = "scene1";  },
     { path = "src.scenes.menu"; key = "menu"},
-        { path = "src.scenes.intro"; key = "intro"; default = "true"},
-    { path = "src.scenes.game"; key = "game"}
+        { path = "src.scenes.intro"; key = "intro"},
+    { path = "src.scenes.game"; key = "game"; default = "true"}
 
 )
+
+font = love.graphics.newFont("assets/fonts/nihonium.ttf", 30)
 
 
 function love.resize(w, h)
