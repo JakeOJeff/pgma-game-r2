@@ -142,8 +142,8 @@ function Textbox:draw()
 
     -- apply bounce scale + rotation
     LG.push()
-    local cx = self.x + w/2
-    local cy = self.y + h/2
+    local cx = self.x + w/3
+    local cy = self.y + h/3
 
     LG.translate(cx, cy)
     LG.rotate(self.r)

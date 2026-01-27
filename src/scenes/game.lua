@@ -151,7 +151,9 @@ function game:draw()
             Textbox.drawAll()
 
     love.graphics.setColor(1,1,1)
-    lg.print(player.collectedScraps.."/6 scraps collected", 0, 0)
+-- after Textbox.drawAll()
+lg.setFont(font)
+lg.print(player.collectedScraps.."/6 scraps collected", 0, 0)
 end
 
 function game:keypressed(key)
