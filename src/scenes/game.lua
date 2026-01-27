@@ -4,7 +4,7 @@ local Renderer = require("src.dungeon.renderer")
 
 local WallPhysics = require("src.dungeon.physics")
 
-local Lighter= require("src.libs.lighter-master")
+local Lighter= require("src.libs.lighter")
 function game:load()
     -- CLEAR OLD PHYSICS WORLD
     if World then
