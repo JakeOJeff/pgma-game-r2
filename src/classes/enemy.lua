@@ -47,37 +47,22 @@ end
 
 function Enemy:update(dt)
     local dx, dy = 0, 0
-    local moving = false
 
-    if input:down("right") then
-        dx = dx + 1
-        self.anim = self.animations.right
-        moving = true
-    elseif input:down("left") then
-        dx = dx - 1
-        self.anim = self.animations.left
-        moving = true
-    end
-
-    if input:down("down") then
-        dy = dy + 1
-        self.anim = self.animations.down
-        moving = true
-    elseif input:down("up") then
-        dy = dy - 1
-        self.anim = self.animations.up
-        moving = true
-    end
-
-    if self.isMoving then
+        if self.isMoving then
 
         if self.detectedPlayer() then
-
+            dx, dy = self.moveCoord(player.x, player.y, self.x, self.y)
         else
-
+            dx = 0
         end
 
     end
+    self.anim = ((dx > 1 and self.animations.right) or (dx < 1 and self.animations.left))
+    self.anim = ((dy > 1 and self.animations.down) or (dy < 1 and self.animations.up)) or self.anim
+
+
+
+
 
     -- Normalize diagonal movement
     local len = math.sqrt(dx * dx + dy * dy)
@@ -113,6 +98,12 @@ end
 function Enemy.detectedPlayer()
     return coordDist(player.x, player.y, self.x, self.y) <= 100
 end
+
+function Enemy.moveCoord(x1, y1, x2, y2)
+    dx = (x1 > x2 and 1) or (x1 < x2 and -1) or 0
+    dy = (y1 > y2 and 1) or (y1 < y2 and -1) or 0
+    return dx, dy
+end
 -- DEBUG
 function Enemy:drawPhysics()
     if not self.physics.body or not self.physics.shape then
@@ -128,7 +119,7 @@ function Enemy:drawPhysics()
 end
 
 function coordDist(x1, y1, x2, y2)
-    return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+    return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 end
 
 return Enemy
