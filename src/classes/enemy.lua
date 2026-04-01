@@ -111,7 +111,7 @@ function Enemy:syncPhysics()
 end
 
 function Enemy.detectedPlayer()
-    if 
+    return coordDist(player.x, player.y, self.x, self.y) <= 100
 end
 -- DEBUG
 function Enemy:drawPhysics()
@@ -127,7 +127,7 @@ function Enemy:drawPhysics()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-local function coordDIst(x1, y1, x2, y2)
+function coordDist(x1, y1, x2, y2)
     return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
 end
 
