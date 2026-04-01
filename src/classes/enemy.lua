@@ -13,7 +13,6 @@ function Enemy:new(x, y)
     self.width = 12
     self.height = 18
 
-
     self.speed = 40
     self.friction = 1000
 
@@ -27,25 +26,20 @@ function Enemy:new(x, y)
         up = anim8.newAnimation(self.grid('1-4', 4), 0.2)
     }
 
-
     self.anim = self.animations.left
 
+    self.isMoving = true
 
     self.collectedScraps = 0
-    
+
     self.physics = {}
     self.physics.body = love.physics.newBody(World, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
-        -- height of foot collider
+    -- height of foot collider
     local FOOT_HEIGHT = self.height / 3
     local FOOT_OFFSET_Y = (self.height - FOOT_HEIGHT) / 2
 
-    self.physics.shape = love.physics.newRectangleShape(
-        0,
-        FOOT_OFFSET_Y,
-        self.width,
-        FOOT_HEIGHT
-    )
+    self.physics.shape = love.physics.newRectangleShape(0, FOOT_OFFSET_Y, self.width, FOOT_HEIGHT)
 
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)
@@ -54,7 +48,6 @@ end
 function Enemy:update(dt)
     local dx, dy = 0, 0
     local moving = false
-
 
     if input:down("right") then
         dx = dx + 1
@@ -74,6 +67,16 @@ function Enemy:update(dt)
         dy = dy - 1
         self.anim = self.animations.up
         moving = true
+    end
+
+    if self.isMoving then
+
+        if self.detectedPlayer() then
+
+        else
+
+        end
+
     end
 
     -- Normalize diagonal movement
@@ -98,9 +101,8 @@ function Enemy:update(dt)
     self:syncPhysics()
 end
 
-
 function Enemy:draw()
-    self.anim:draw(self.spriteSheet, self.x, self.y, nil, 1, nil, self.width/2, self.height/2)
+    self.anim:draw(self.spriteSheet, self.x, self.y, nil, 1, nil, self.width / 2, self.height / 2)
 end
 
 function Enemy:syncPhysics()
@@ -108,17 +110,25 @@ function Enemy:syncPhysics()
     self.physics.body:setLinearVelocity(self.xVel, self.yVel)
 end
 
-
+function Enemy.detectedPlayer()
+    if 
+end
 -- DEBUG
 function Enemy:drawPhysics()
-    if not self.physics.body or not self.physics.shape then return end
+    if not self.physics.body or not self.physics.shape then
+        return
+    end
 
     love.graphics.setColor(0, 1, 0, 0.7)
 
-    local points = { self.physics.body:getWorldPoints(self.physics.shape:getPoints()) }
+    local points = {self.physics.body:getWorldPoints(self.physics.shape:getPoints())}
     love.graphics.polygon("line", points)
 
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+local function coordDIst(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
 end
 
 return Enemy
