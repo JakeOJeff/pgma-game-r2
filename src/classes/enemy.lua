@@ -4,6 +4,9 @@ Enemy.__index = Enemy
 Enemies = {}
 
 function Enemy:new(x, y)
+
+    local self = setmetatable({}, Enemy)
+
     self.x = x
     self.y = y
 
@@ -43,26 +46,37 @@ function Enemy:new(x, y)
 
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.body:setGravityScale(0)
+
+    table.insert(Enemies, self)
+
+    return self
 end
 
 function Enemy:update(dt)
     local dx, dy = 0, 0
 
-        if self.isMoving then
+    if self.isMoving then
 
-        if self.detectedPlayer() then
-            dx, dy = self.moveCoord(player.x, player.y, self.x, self.y)
+        if self:detectedPlayer() then
+            dx, dy = self:moveCoord(player.x, player.y, self.x, self.y)
         else
             dx = 0
         end
 
     end
-    self.anim = ((dx > 1 and self.animations.right) or (dx < 1 and self.animations.left))
-    self.anim = ((dy > 1 and self.animations.down) or (dy < 1 and self.animations.up)) or self.anim
-
-
-
-
+    if math.abs(dx) > math.abs(dy) then
+        if dx > 0 then
+            self.anim = self.animations.right
+        elseif dx < 0 then
+            self.anim = self.animations.left
+        end
+    else
+        if dy > 0 then
+            self.anim = self.animations.down
+        elseif dy < 0 then
+            self.anim = self.animations.up
+        end
+    end
 
     -- Normalize diagonal movement
     local len = math.sqrt(dx * dx + dy * dy)
@@ -95,11 +109,11 @@ function Enemy:syncPhysics()
     self.physics.body:setLinearVelocity(self.xVel, self.yVel)
 end
 
-function Enemy.detectedPlayer()
+function Enemy:detectedPlayer()
     return coordDist(player.x, player.y, self.x, self.y) <= 100
 end
 
-function Enemy.moveCoord(x1, y1, x2, y2)
+function Enemy:moveCoord(x1, y1, x2, y2)
     dx = (x1 > x2 and 1) or (x1 < x2 and -1) or 0
     dy = (y1 > y2 and 1) or (y1 < y2 and -1) or 0
     return dx, dy

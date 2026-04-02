@@ -27,6 +27,10 @@ function game:load()
 
     player = require 'src.classes.player'
     player:load()  -- Creates new physics body in new World
+
+    Enemy = require 'src.classes.enemy'
+    local tX, tY = self.dungeon:getRandomFloorTile()
+    enemy = Enemy:new(tX, tY)
     
     -- NOW spawn player (this will update the newly created body's position)
     self:spawnPlayer()
@@ -77,6 +81,7 @@ function game:spawnScrap(count)
 end
 
 function game:update(dt)
+    enemy:update(dt)
     World:update(dt)
     input:update()
 
@@ -136,7 +141,7 @@ function game:draw()
     -- self:drawPhysics()
     preDrawLights()
     
-
+    enemy:draw()
     cam:detach()
     drawLights()
 
