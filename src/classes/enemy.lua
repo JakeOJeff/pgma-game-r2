@@ -92,7 +92,7 @@ function Enemy:update(dt)
         self.yVel = math.max(math.min(0, self.yVel - self.friction * dt), 0)
     end
 
-    if not moving then
+    if dx == 0 and dy == 0 then
         self.anim:gotoFrame(2)
     end
 

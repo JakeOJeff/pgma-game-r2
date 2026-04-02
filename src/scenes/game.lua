@@ -29,8 +29,13 @@ function game:load()
     player:load()  -- Creates new physics body in new World
 
     Enemy = require 'src.classes.enemy'
+    local tileSize = 16
     local tX, tY = self.dungeon:getRandomFloorTile()
-    enemy = Enemy:new(tX, tY)
+
+    local x = (tX - 0.5) * tileSize
+    local y = (tY - 0.5) * tileSize
+
+    enemy = Enemy:new(x, y)
     
     -- NOW spawn player (this will update the newly created body's position)
     self:spawnPlayer()
